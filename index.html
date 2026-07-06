@@ -1452,8 +1452,8 @@
     setAiStatus('');
     aiResult.style.display = 'none';
 
-    const prompt = 'Sen deneyimli bir sosyal medya editörüsün(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Aşağıdaki Instagram gönderisi için '
-      + 'doğal, ilgi çekici bir Türkçe açıklama (caption) kaynak site adı ve konuyla ilgili 5 hashtag üret.\n\n'
+    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya editörüsün(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Aşağıdaki Instagram gönderisi için '
+      + 'doğal, ilgi çekici bir Türkçe açıklama (caption)+Kaynak:(Haber sitesi adı) ve konuyla ilgili 5 hashtag üret.\n\n'
       + 'Şablon türü: ' + c.templateLabel + '\n'
       + 'Başlık: ' + c.title + '\n'
       + 'Açıklama / detay: ' + c.desc + '\n'
@@ -1595,7 +1595,7 @@
       .map(([k,fs])=> k + ': {' + fs.map(f=>'"'+f+'"').join(', ') + '}')
       .join('\n');
 
-    const prompt = 'Sen bir haber editörü ve sosyal medya tasarımcısısın(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
+    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya tasarımcısısın(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışansın). Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
       + 'ADIM 1 - Şablon seç (haberin türüne göre en uygun OLANI seç):\n'
       + '- breaking: son dakika / güncel haber\n'
       + '- project: proje, yatırım, hizmet tanıtımı\n'
@@ -1608,8 +1608,8 @@
       + '4 turuncu=enerji/altyapı, 5 petrol=sanayi/üretim, 6 bordo=güvenlik/asayiş, 7 krem=kültür/sanat/zarif konular.\n\n'
       + 'ADIM 3 - Sadece seçtiğin şablona ait alanları, aşağıdaki şemaya göre doldur (diğer şablonların alanlarını EKLEME):\n'
       + schemaHint + '\n\n'
-      + 'ADIM 4 - Haberin öne çıkan görselinin (og:image gibi) tam URL\'sini bul(Yüksek çözünürlüklü hali varsa, yüksek çözünürlüklü olan görselin adresini al); bulamazsan null yaz.\n\n'
-      + 'ADIM 5 - 4-6 satırlık doğal bir Türkçe Instagram açıklaması (caption), kaynak site adı ve konuyla ilgili 5 Türkçe hashtag üret.\n\n'
+      + 'ADIM 4 - Haberin öne çıkan görselinin Yüksek çözünürlüklü hali varsa, yüksek çözünürlüklü olan görselin adresini al (og:image gibi) tam URL\'sini bul; bulamazsan null yaz.\n\n'
+      + 'ADIM 5 - 4-6 satırlık doğal bir Türkçe Instagram açıklaması (caption)+Kaynak:(Haber sitesi adı) ve konuyla ilgili 5 Türkçe hashtag üret.\n\n'
       + 'KURALLAR:\n'
       + '- Başlık alanlarını (title/badge gibi BÜYÜK HARF kullanılan alanlar) tamamen büyük harfle yaz.\n'
       + '- Metinler kısa, çarpıcı ve haberin özünü yansıtsın; uydurma bilgi ekleme.\n'
