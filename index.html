@@ -1430,8 +1430,8 @@
     setAiStatus('');
     aiResult.style.display = 'none';
 
-    const prompt = 'Sen deneyimli bir sosyal medya editörüsün. Aşağıdaki Instagram gönderisi için '
-      + 'doğal, ilgi çekici bir Türkçe açıklama (caption) ve konuyla ilgili 15-20 hashtag üret.\n\n'
+    const prompt = 'Sen deneyimli bir sosyal medya editörüsün (AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Aşağıdaki Instagram gönderisi için '
+      + 'doğal, ilgi çekici bir Türkçe açıklama (caption) ve konuyla ilgili 5 hashtag üret.\n\n'
       + 'Şablon türü: ' + c.templateLabel + '\n'
       + 'Başlık: ' + c.title + '\n'
       + 'Açıklama / detay: ' + c.desc + '\n'
@@ -1573,7 +1573,7 @@
       .map(([k,fs])=> k + ': {' + fs.map(f=>'"'+f+'"').join(', ') + '}')
       .join('\n');
 
-    const prompt = 'Sen bir haber editörü ve sosyal medya tasarımcısısın. Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
+    const prompt = 'Sen bir haber editörü ve sosyal medya tasarımcısısın (AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
       + 'ADIM 1 - Şablon seç (haberin türüne göre en uygun OLANI seç):\n'
       + '- breaking: son dakika / güncel haber\n'
       + '- project: proje, yatırım, hizmet tanıtımı\n'
