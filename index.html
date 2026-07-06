@@ -284,7 +284,7 @@
       <label class="field-label">Marka / Hesap Adı</label>
       <input type="text" id="brandName" value="HABER-İ REİS">
       <label class="field-label">Web Sitesi</label>
-      <input type="text" id="website" value="www.habername.com">
+      <input type="text" id="website" value="@haberireis">
 
       <label class="field-label">Logo</label>
       <div class="upload-row">
@@ -1453,7 +1453,7 @@
     aiResult.style.display = 'none';
 
     const prompt = 'Sen deneyimli bir sosyal medya editörüsün(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Aşağıdaki Instagram gönderisi için '
-      + 'doğal, ilgi çekici bir Türkçe açıklama (caption) ve konuyla ilgili 5 hashtag üret.\n\n'
+      + 'doğal, ilgi çekici bir Türkçe açıklama (caption) kaynak site adı ve konuyla ilgili 5 hashtag üret.\n\n'
       + 'Şablon türü: ' + c.templateLabel + '\n'
       + 'Başlık: ' + c.title + '\n'
       + 'Açıklama / detay: ' + c.desc + '\n'
@@ -1461,7 +1461,7 @@
       + 'Marka / hesap: ' + c.brand + '\n'
       + 'Web sitesi: ' + c.website + '\n\n'
       + 'Kurallar:\n'
-      + '- Caption 2-4 kısa satır/paragraf olsun, gerekirse ölçülü emoji kullan, abartma.\n'
+      + '- Caption 4-6 kısa satır/paragraf olsun, gerekirse ölçülü emoji kullan, abartma.\n'
       + '- Hashtagler Türkçe ve konuyla doğrudan ilgili olsun, hepsi # ile başlasın, boşluksuz, tekrar etmesin.\n'
       + '- SADECE aşağıdaki JSON formatında yanıt ver. Başka hiçbir metin, açıklama veya kod bloğu ekleme:\n'
       + '{"caption": "...", "hashtags": ["#etiket1","#etiket2"]}';
@@ -1608,8 +1608,8 @@
       + '4 turuncu=enerji/altyapı, 5 petrol=sanayi/üretim, 6 bordo=güvenlik/asayiş, 7 krem=kültür/sanat/zarif konular.\n\n'
       + 'ADIM 3 - Sadece seçtiğin şablona ait alanları, aşağıdaki şemaya göre doldur (diğer şablonların alanlarını EKLEME):\n'
       + schemaHint + '\n\n'
-      + 'ADIM 4 - Haberin öne çıkan görselinin (og:image gibi) tam URL\'sini bul; bulamazsan null yaz.\n\n'
-      + 'ADIM 5 - 2-4 satırlık doğal bir Türkçe Instagram açıklaması (caption) ve konuyla ilgili 5 Türkçe hashtag üret.\n\n'
+      + 'ADIM 4 - Haberin öne çıkan görselinin (og:image gibi) tam URL\'sini bul(Yüksek çözünürlüklü hali varsa, yüksek çözünürlüklü olan görselin adresini al); bulamazsan null yaz.\n\n'
+      + 'ADIM 5 - 4-6 satırlık doğal bir Türkçe Instagram açıklaması (caption), kaynak site adı ve konuyla ilgili 5 Türkçe hashtag üret.\n\n'
       + 'KURALLAR:\n'
       + '- Başlık alanlarını (title/badge gibi BÜYÜK HARF kullanılan alanlar) tamamen büyük harfle yaz.\n'
       + '- Metinler kısa, çarpıcı ve haberin özünü yansıtsın; uydurma bilgi ekleme.\n'
