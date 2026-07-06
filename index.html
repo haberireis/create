@@ -1565,7 +1565,7 @@
     setAiStatus('');
     aiResult.style.display = 'none';
 
-    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya editörüsün(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Aşağıdaki Instagram gönderisi için '
+    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya editörüsün(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketinde çalışıyorsun). Aşağıdaki Instagram gönderisi için '
       + 'doğal, ilgi çekici, akıcı bir Türkçe gönderi açıklaması (caption) ve konuyla ilgili güçlü bir hashtag seti üret.\n\n'
       + 'Şablon türü: ' + c.templateLabel + '\n'
       + 'Başlık: ' + c.title + '\n'
@@ -1579,8 +1579,8 @@
       + '3) CTA: Son satırda okuyucuyu harekete geçiren net bir çağrı olsun (yorum yapmaya, paylaşmaya, kaydetmeye ya da profildeki linke yönlendirmeye teşvik et).\n'
       + '4) KAYNAK: En altta, ayrı bir satırda "Kaynak: ' + (c.website || c.brand) + '" yaz (başka hiçbir ek bilgi ekleme).\n\n'
       + 'HASHTAG KURALLARI:\n'
-      + '- Konuyla doğrudan ilgili 8-12 adet Türkçe hashtag üret.\n'
-      + '- Karışım şu şekilde olsun: 2-3 tanesi geniş/genel gündem etiketi, 3-4 tanesi haberin konusuna özel etiket, 2-3 tanesi marka/hesapla ilgili etiket, 1-2 tanesi güncel/trend tarzı etiket.\n'
+      + '- Konuyla doğrudan ilgili 5 adet Türkçe hashtag üret.\n'
+      + '- Karışım şu şekilde olsun: 2 tanesi geniş/genel gündem etiketi, 2 tanesi haberin konusuna özel etiket, 0 tanesi marka/hesapla ilgili etiket, 1 tanesi güncel/trend tarzı etiket.\n'
       + '- Hepsi # ile başlasın, boşluksuz, birbirinin tekrarı olmasın, çok genel/anlamsız etiketlerden (#post gibi) kaçın.\n'
       + '- SADECE aşağıdaki JSON formatında yanıt ver. Başka hiçbir metin, açıklama veya kod bloğu ekleme:\n'
       + '{"caption": "...", "hashtags": ["#etiket1","#etiket2"]}';
@@ -1715,8 +1715,8 @@
       .map(([k,fs])=> k + ': {' + fs.map(f=>'"'+f+'"').join(', ') + '}')
       .join('\n');
 
-    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya tasarımcısısın(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışansın). Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
-      + 'ADIM 1 - Şablon seç (haberin türüne göre en uygun OLANI seç):\n'
+    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya tasarımcısısın(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketinde çalışıyorsun.). Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
+      + 'ADIM 1 - Şablon seç (haberin türüne göre uygun OLANI seç):\n'
       + '- breaking: son dakika / güncel haber\n'
       + '- project: proje, yatırım, hizmet tanıtımı\n'
       + '- quote: bir kişinin sözü/açıklaması öne çıkıyorsa\n'
@@ -1734,7 +1734,7 @@
       + '  2) GÖVDE: 3-5 kısa satır/paragrafta haberin özünü doğal bir dille anlat; gerekirse ölçülü emoji kullan, abartma, uydurma bilgi ekleme.\n'
       + '  3) CTA: Son satırda okuyucuyu harekete geçiren net bir çağrı olsun (yorum yapmaya, paylaşmaya, kaydetmeye ya da profildeki linke yönlendirmeye teşvik et).\n'
       + '  4) KAYNAK: En altta, ayrı bir satırda "Kaynak: (haberin alındığı sitenin adı)" yaz (haberin kaynağı olan sitenin gerçek adını linkten/domainden çıkar).\n'
-      + '  Hashtagler için: konuyla doğrudan ilgili 8-12 adet Türkçe hashtag üret; 2-3 tanesi geniş/genel gündem etiketi, 3-4 tanesi haberin konusuna özel etiket, 2-3 tanesi marka/hesapla ilgili etiket, 1-2 tanesi güncel/trend tarzı etiket olsun; hepsi # ile başlasın, boşluksuz, tekrarsız, anlamsız/aşırı genel etiketlerden kaçın.\n\n'
+      + '  Hashtagler için: konuyla doğrudan ilgili 5 adet Türkçe hashtag üret; 2 tanesi geniş/genel gündem etiketi, 2 tanesi haberin konusuna özel etiket, 0 tanesi marka/hesapla ilgili etiket, 1 tanesi güncel/trend tarzı etiket olsun; hepsi # ile başlasın, boşluksuz, tekrarsız, anlamsız/aşırı genel etiketlerden kaçın.\n\n'
       + 'KURALLAR:\n'
       + '- Başlık alanlarını (title/badge gibi BÜYÜK HARF kullanılan alanlar) tamamen büyük harfle yaz.\n'
       + '- Metinler kısa, çarpıcı ve haberin özünü yansıtsın; uydurma bilgi ekleme.\n'
