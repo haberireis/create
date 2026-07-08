@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gönderi Atölyesi Pro+ — Instagram Gönderi Oluşturucu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --accent:#C1121F;
+    --accent2:#D4AF37;
+    --bgdark:#111111;
+    --panel-bg:#141414;
+    --panel-line:#2a2a2a;
+    --text:#f0ede6;
+    --muted:#9a958a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;background:#0a0a0a;color:var(--text);font-family:'Montserrat',sans-serif;}
+  .app{display:flex;min-height:100vh;}
+
+  /* ---------- PANEL ---------- */
+  .panel{
+    width:400px;min-width:340px;max-width:420px;
+    background:var(--panel-bg);
+    border-right:1px solid var(--panel-line);
+    padding:28px 26px 60px;
+    overflow-y:auto;
+    height:100vh;
+    position:relative;
+  }
+  .panel::-webkit-scrollbar{width:8px;}
+  .panel::-webkit-scrollbar-thumb{background:#333;border-radius:4px;}
+
+  .brand-mark{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .brand-mark .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb, var(--accent2) 30%, transparent);}
+  .brand-mark span{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:14px;color:var(--muted);text-transform:uppercase;}
+
+  h1.title{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:38px;
+    letter-spacing:1px;
+    margin:2px 0 4px;
+    color:var(--text);
+  }
+  h1.title em{font-style:normal;color:var(--accent2);}
+  .subtitle{font-size:13px;color:var(--muted);margin:0 0 28px;line-height:1.5;}
+
+  .section{margin-bottom:30px;}
+  .section-head{
+    display:flex;align-items:baseline;gap:10px;margin-bottom:14px;
+  }
+  .section-head .num{
+    font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--accent2);
+    border:1px solid var(--accent2);border-radius:50%;
+    width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .section-head h2{
+    font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:1px;
+    text-transform:uppercase;margin:0;color:var(--text);
+  }
+
+  /* ratio selector */
+  .ratio-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;}
+  .ratio-btn{
+    background:#1c1c1c;border:1.5px solid #2f2f2f;border-radius:8px;
+    padding:10px 4px 8px;cursor:pointer;color:var(--muted);
+    font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;
+    text-align:center;transition:all .15s ease;display:flex;flex-direction:column;align-items:center;gap:6px;
+  }
+  .ratio-swatch{width:26px;background:#3a3a3a;border-radius:3px;transition:background .15s;}
+  .ratio-btn:hover{border-color:var(--accent2);color:var(--text);}
+  .ratio-btn.active{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 16%, #1c1c1c);color:var(--text);}
+  .ratio-btn.active .ratio-swatch{background:var(--accent2);}
+
+  .tpl-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .tpl-btn{
+    background:#1c1c1c;border:1.5px solid #2f2f2f;border-radius:8px;
+    padding:10px 6px;cursor:pointer;color:var(--muted);
+    font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;
+    text-align:center;transition:all .15s ease;line-height:1.3;
+  }
+  .tpl-btn .ico{display:block;font-size:20px;margin-bottom:4px;}
+  .tpl-btn:hover{border-color:var(--accent2);color:var(--text);}
+  .tpl-btn.active{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 16%, #1c1c1c);color:var(--text);}
+
+  .theme-row{display:flex;gap:10px;flex-wrap:wrap;}
+  .theme-swatch{
+    width:44px;height:44px;border-radius:10px;cursor:pointer;
+    border:2px solid transparent;position:relative;
+    display:flex;overflow:hidden;flex-shrink:0;
+  }
+  .theme-swatch span{flex:1;}
+  .theme-swatch.active{border-color:var(--text);transform:scale(1.06);}
+
+  label.field-label{
+    display:block;font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+    color:var(--muted);margin:0 0 6px;font-weight:700;
+  }
+  input[type=text], textarea{
+    width:100%;background:#1c1c1c;border:1px solid #2f2f2f;border-radius:7px;
+    color:var(--text);padding:10px 12px;font-family:'Montserrat',sans-serif;
+    font-size:13.5px;margin-bottom:14px;resize:vertical;
+  }
+  textarea{min-height:56px;line-height:1.4;}
+  input[type=text]:focus, textarea:focus{outline:none;border-color:var(--accent2);}
+
+  .upload-row{
+    display:flex;align-items:center;gap:12px;margin-bottom:16px;
+  }
+  .upload-btn{
+    background:#1c1c1c;border:1px dashed #3a3a3a;border-radius:7px;
+    padding:10px 14px;font-size:12.5px;color:var(--muted);cursor:pointer;
+    font-weight:600;flex:1;text-align:center;transition:border-color .15s;
+  }
+  .upload-btn:hover{border-color:var(--accent2);color:var(--text);}
+  .thumb{
+    width:44px;height:44px;border-radius:8px;background:#000;flex-shrink:0;
+    object-fit:cover;border:1px solid #333;
+  }
+  input[type=file]{display:none;}
+
+  .field-group{display:none;}
+  .field-group.active{display:block;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .divider{height:1px;background:var(--panel-line);margin:26px 0;}
+
+  .download-btn{
+    width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;
+    padding:16px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;
+    cursor:pointer;text-transform:uppercase;transition:filter .15s;
+    box-shadow:0 6px 20px -6px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .download-btn:hover{filter:brightness(1.1);}
+
+  /* ---------- FULL EXPORT (indir + hikaye + kopyala tek buton) ---------- */
+  .full-export-btn{
+    width:100%;color:#fff;border:none;border-radius:8px;margin-top:12px;
+    padding:15px;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;
+    cursor:pointer;text-transform:uppercase;transition:filter .15s, transform .1s;
+    background:linear-gradient(120deg, var(--accent), var(--accent2));
+    box-shadow:0 6px 20px -6px color-mix(in srgb, var(--accent2) 55%, transparent);
+  }
+  .full-export-btn:hover{filter:brightness(1.08);}
+  .full-export-btn:active{transform:scale(.99);}
+  .full-export-btn:disabled{opacity:.6;cursor:default;filter:none;transform:none;}
+  .full-export-note{font-size:11px;color:var(--muted);text-align:center;margin:8px 0 0;line-height:1.5;}
+
+  .hint{font-size:11.5px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5;}
+
+  /* ---------- AI CAPTION ---------- */
+  .ai-btn{
+    width:100%;background:transparent;border:1.5px solid var(--accent2);color:var(--accent2);
+    border-radius:8px;padding:14px;font-family:'Bebas Neue',sans-serif;font-size:17px;
+    letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:all .15s;margin-bottom:6px;
+  }
+  .ai-btn:hover{background:color-mix(in srgb, var(--accent2) 16%, transparent);}
+  .ai-btn:disabled{opacity:.55;cursor:default;}
+  .ai-result{margin-top:16px;}
+  .ai-result textarea{background:#181818;font-size:13px;line-height:1.5;}
+  #aiHashtags{min-height:70px;color:var(--accent2);}
+  .copy-btn{
+    width:100%;background:#1c1c1c;border:1px solid #2f2f2f;color:var(--text);
+    border-radius:7px;padding:10px;font-size:12px;font-weight:700;letter-spacing:.4px;
+    cursor:pointer;text-transform:uppercase;transition:border-color .15s;
+  }
+  .copy-btn:hover{border-color:var(--accent2);}
+  .ai-status{font-size:11.5px;color:var(--muted);text-align:center;margin:8px 0 0;min-height:14px;}
+  .ai-status.error{color:#e0736b;}
+  .ai-status.ok{color:#7fd99a;}
+
+  /* ---------- QUICK AI (NEWS URL -> AUTO POST) ---------- */
+  .quickai-card{
+    border:1.5px solid var(--accent2);border-radius:12px;padding:20px 18px;margin-bottom:24px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--accent2) 10%, #1a1a1a), #161616);
+    position:relative;overflow:hidden;
+  }
+  .quickai-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .quickai-badge{
+    background:var(--accent2);color:#1a1408;font-family:'Bebas Neue',sans-serif;font-size:11px;
+    letter-spacing:1px;padding:2px 8px;border-radius:4px;flex-shrink:0;
+  }
+  .quickai-head h2{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;margin:0;color:var(--text);}
+  .quickai-desc{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 14px;}
+  .quickai-card input[type=text]{margin-bottom:12px;}
+  .quickai-btn{border-color:var(--accent2);color:var(--accent2);margin-bottom:0;}
+  .quickai-progress{
+    height:4px;width:100%;background:#2a2a2a;border-radius:2px;overflow:hidden;margin-top:10px;display:none;
+  }
+  .quickai-progress.active{display:block;}
+  .quickai-progress span{
+    display:block;height:100%;width:40%;background:var(--accent2);
+    animation:quickaiSlide 1.1s ease-in-out infinite;
+  }
+  @keyframes quickaiSlide{
+    0%{transform:translateX(-100%);} 100%{transform:translateX(350%);}
+  }
+  .quickai-note{font-size:10.5px;color:var(--muted);margin-top:10px;line-height:1.5;opacity:.8;}
+
+  /* ---------- DOWNLOAD ROW / FORMAT TOGGLE ---------- */
+  .format-toggle{display:flex;gap:8px;margin-bottom:12px;}
+  .format-btn{
+    flex:1;background:#1c1c1c;border:1.5px solid #2f2f2f;border-radius:7px;
+    padding:9px 4px;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;
+    text-align:center;transition:all .15s ease;
+  }
+  .format-btn:hover{border-color:var(--accent2);color:var(--text);}
+  .format-btn.active{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 16%, #1c1c1c);color:var(--text);}
+
+  /* 2. görsel (detaylar) özelliği */
+  .second-slide-box{
+    background:#1c1c1c;border:1.5px solid #2f2f2f;border-radius:10px;
+    padding:12px 14px;margin:14px 0;
+  }
+  .checkbox-row{
+    display:flex;align-items:center;gap:9px;cursor:pointer;
+    font-family:'Montserrat',sans-serif;font-size:12.5px;font-weight:600;color:var(--text);
+  }
+  .checkbox-row input[type="checkbox"]{width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
+  .second-slide-box .field-label{margin-top:12px;}
+  .second-slide-disabled-note{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5;}
+
+  .slide-switch{display:flex;gap:8px;margin-bottom:14px;}
+  .slide-btn{
+    background:#1c1c1c;border:1.5px solid #2f2f2f;border-radius:8px;
+    padding:9px 16px;cursor:pointer;color:var(--muted);
+    font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;
+    transition:all .15s ease;
+  }
+  .slide-btn:hover{border-color:var(--accent2);color:var(--text);}
+  .slide-btn.active{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 16%, #1c1c1c);color:var(--text);}
+  .secondary-btn{
+    width:100%;background:#1c1c1c;border:1px solid #2f2f2f;color:var(--text);
+    border-radius:7px;padding:11px;font-size:12.5px;font-weight:700;letter-spacing:.4px;
+    cursor:pointer;text-transform:uppercase;transition:border-color .15s;margin-top:10px;
+  }
+  .secondary-btn:hover{border-color:var(--accent2);}
+
+  /* ---------- STAGE ---------- */
+  .stage{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    background:
+      radial-gradient(circle at 30% 20%, #1a1a1a, #0a0a0a 60%);
+    padding:40px;overflow:auto;
+  }
+  .canvas-wrap{
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.7);
+    border-radius:4px;overflow:hidden;line-height:0;
+    background:#000;
+  }
+  #canvas{display:block;}
+
+  @media (max-width:900px){
+    .app{flex-direction:column;}
+    .panel{width:100%;max-width:none;height:auto;border-right:none;border-bottom:1px solid var(--panel-line);}
+    .stage{padding:24px 16px 50px;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ CONTROL PANEL ============ -->
+  <aside class="panel">
+    <div class="brand-mark"><span class="dot"></span><span>Gönderi Atölyesi Pro</span></div>
+    <h1 class="title">Instagram <em>Gönderi</em><br>Oluşturucu</h1>
+    <p class="subtitle">Oranı ve şablonu seç, logonu ve görselini yükle, metni düzenle, renk temanı seç — dakikalar içinde paylaşıma hazır bir gönderi indir.</p>
+
+    <!-- QUICK AI: NEWS URL -> AUTO POST -->
+    <div class="quickai-card">
+      <div class="quickai-head">
+        <span class="quickai-badge">YENİ</span>
+        <h2>Haber Linkinden Otomatik Oluştur</h2>
+      </div>
+      <p class="quickai-desc">Bir haber linki yapıştır — yapay zekâ haberi analiz etsin; en uygun şablonu, rengi, başlıkları, öne çıkan görseli ve açıklama/hashtag'leri otomatik doldursun.</p>
+      <input type="text" id="newsUrl" placeholder="https://ornekhaber.com/haber-basligi">
+      <button class="ai-btn quickai-btn" id="newsGenBtn">🔗 Linkten Gönderi Oluştur</button>
+      <div class="quickai-progress" id="newsProgress"><span></span></div>
+      <p class="ai-status" id="newsStatus"></p>
+      <p class="quickai-note">Önce yapay zeka linki doğrudan okumayı dener; site engellerse otomatik olarak alternatif bir okuyucu servisle tekrar dener. Hata alırsan durum mesajındaki teknik detay sorunun kaynağını gösterir.</p>
+    </div>
+
+    <!-- STEP 1: RATIO -->
+    <div class="section">
+      <div class="section-head"><span class="num">1</span><h2>Format / Oran</h2></div>
+      <div class="ratio-grid">
+        <div class="ratio-btn" data-ratio="square" data-w="2160" data-h="2160"><div class="ratio-swatch" style="height:26px;"></div>Kare 1:1</div>
+        <div class="ratio-btn active" data-ratio="portrait" data-w="2160" data-h="2700"><div class="ratio-swatch" style="height:32px;"></div>Dikey 4:5</div>
+        <div class="ratio-btn" data-ratio="story" data-w="2160" data-h="3840"><div class="ratio-swatch" style="height:44px;"></div>Hikaye 9:16</div>
+        <div class="ratio-btn" data-ratio="landscape" data-w="2160" data-h="1132"><div class="ratio-swatch" style="height:14px;"></div>Yatay 16:9</div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="section">
+      <div class="section-head"><span class="num">2</span><h2>Şablon Seç</h2></div>
+      <div class="tpl-grid">
+        <div class="tpl-btn active" data-tpl="breaking"><span class="ico">⚡</span>Son Dakika</div>
+        <div class="tpl-btn" data-tpl="project"><span class="ico">🏗️</span>Proje / Hizmet</div>
+        <div class="tpl-btn" data-tpl="quote"><span class="ico">❝</span>Söz / Açıklama</div>
+        <div class="tpl-btn" data-tpl="event"><span class="ico">🎉</span>Etkinlik</div>
+        <div class="tpl-btn" data-tpl="stat"><span class="ico">📊</span>İstatistik</div>
+        <div class="tpl-btn" data-tpl="minimal"><span class="ico">✦</span>Minimal Duyuru</div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="section">
+      <div class="section-head"><span class="num">3</span><h2>Renk Teması</h2></div>
+      <div class="theme-row" id="themeRow"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- STEP 4 -->
+    <div class="section">
+      <div class="section-head"><span class="num">4</span><h2>Marka</h2></div>
+      <label class="field-label">Marka / Hesap Adı</label>
+      <input type="text" id="brandName" value="HABER-İ REİS">
+      <label class="field-label">Web Sitesi</label>
+      <input type="text" id="website" value="@haberireis">
+
+      <label class="field-label">Logo</label>
+      <div class="upload-row">
+        <img class="thumb" id="logoThumb" alt="">
+        <label class="upload-btn" for="logoInput">Logo Yükle (PNG/JPG)</label>
+        <input type="file" id="logoInput" accept="image/*">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- STEP 5 -->
+    <div class="section">
+      <div class="section-head"><span class="num">5</span><h2>Görsel & Metin</h2></div>
+
+      <label class="field-label">Görsel (bazı şablonlarda opsiyonel)</label>
+      <div class="upload-row">
+        <img class="thumb" id="imgThumb" alt="">
+        <label class="upload-btn" for="imgInput">Görsel Yükle</label>
+        <input type="file" id="imgInput" accept="image/*">
+      </div>
+
+      <!-- 2ND SLIDE: DETAIL PAGE (square/portrait only) -->
+      <div class="second-slide-box">
+        <label class="checkbox-row">
+          <input type="checkbox" id="secondSlideToggle" checked>
+          <span>2. Görsel Ekle — Detaylar Sayfası</span>
+        </label>
+        <div id="secondSlideFields" style="display:none;">
+          <label class="field-label">Detay Metni (habere meraklılar için)</label>
+          <textarea id="detailText" style="min-height:170px;" placeholder="Yapay zeka ile otomatik doldurulur, dilersen elle de düzenleyebilirsin. Paragraflar arasına boş satır bırakarak ayırabilirsin."></textarea>
+        </div>
+        <p class="second-slide-disabled-note" id="secondSlideNote" style="display:none;">Bu özellik yalnızca Kare 1:1 ve Dikey 4:5 formatlarında kullanılabilir.</p>
+      </div>
+
+      <!-- BREAKING NEWS FIELDS -->
+      <div class="field-group active" data-fg="breaking">
+        <label class="field-label">Rozet Metni</label>
+        <input type="text" id="b_badge" value="SON DAKİKA">
+        <label class="field-label">Başlık — 1. Satır</label>
+        <input type="text" id="b_title1" value="YENİ ULAŞIM PROJESİ">
+        <label class="field-label">Başlık — 2. Satır (vurgulu)</label>
+        <input type="text" id="b_title2" value="HİZMETE AÇILDI">
+        <label class="field-label">Açıklama</label>
+        <textarea id="b_desc">Vatandaşlarımızın hayatını kolaylaştıracak dev proje tamamlandı.</textarea>
+        <label class="field-label">Tarih</label>
+        <input type="text" id="b_date" value="">
+      </div>
+
+      <!-- PROJECT FIELDS -->
+      <div class="field-group" data-fg="project">
+        <label class="field-label">Başlık — 1. Satır</label>
+        <input type="text" id="p_title1" value="TÜRKİYE'NİN">
+        <label class="field-label">Başlık — 2. Satır (vurgulu)</label>
+        <input type="text" id="p_title2" value="GELECEĞİNE YATIRIM">
+        <label class="field-label">Açıklama</label>
+        <textarea id="p_desc">Ülkemizin dört bir yanında dev projeler yükselmeye devam ediyor.</textarea>
+
+        <div class="two-col">
+          <div>
+            <label class="field-label">Madde 1 — İkon</label>
+            <input type="text" id="p_f1i" value="🛤️">
+          </div>
+          <div>
+            <label class="field-label">Başlık</label>
+            <input type="text" id="p_f1t" value="ULAŞIM">
+          </div>
+        </div>
+        <label class="field-label">Açıklama</label>
+        <input type="text" id="p_f1d" value="Daha hızlı, daha konforlu yeni ulaşım ağları">
+
+        <div class="two-col">
+          <div>
+            <label class="field-label">Madde 2 — İkon</label>
+            <input type="text" id="p_f2i" value="🏙️">
+          </div>
+          <div>
+            <label class="field-label">Başlık</label>
+            <input type="text" id="p_f2t" value="KENTSEL DÖNÜŞÜM">
+          </div>
+        </div>
+        <label class="field-label">Açıklama</label>
+        <input type="text" id="p_f2d" value="Güvenli şehirler, güçlü yarınlar">
+
+        <div class="two-col">
+          <div>
+            <label class="field-label">Madde 3 — İkon</label>
+            <input type="text" id="p_f3i" value="⚙️">
+          </div>
+          <div>
+            <label class="field-label">Başlık</label>
+            <input type="text" id="p_f3t" value="TEKNOLOJİ">
+          </div>
+        </div>
+        <label class="field-label">Açıklama</label>
+        <input type="text" id="p_f3d" value="Milli ve yerli projelerle güçlü Türkiye">
+
+        <label class="field-label">Alt Slogan</label>
+        <input type="text" id="p_tag" value="GÜÇLÜ TÜRKİYE, AYDINLIK YARINLAR">
+      </div>
+
+      <!-- QUOTE FIELDS -->
+      <div class="field-group" data-fg="quote">
+        <label class="field-label">Söz / Açıklama Metni</label>
+        <textarea id="q_text">Biz bu millete efendilik etmek için değil, hizmetkâr olmak için yola çıktık.</textarea>
+        <label class="field-label">İsim Soyisim</label>
+        <input type="text" id="q_name" value="AD SOYAD">
+        <label class="field-label">Unvan</label>
+        <input type="text" id="q_title" value="GÖREV / UNVAN">
+      </div>
+
+      <!-- EVENT FIELDS -->
+      <div class="field-group" data-fg="event">
+        <label class="field-label">Üst Etiket</label>
+        <input type="text" id="ev_badge" value="DAVETLİSİNİZ">
+        <div class="two-col">
+          <div>
+            <label class="field-label">Gün</label>
+            <input type="text" id="ev_day" value="24">
+          </div>
+          <div>
+            <label class="field-label">Ay</label>
+            <input type="text" id="ev_month" value="MAYIS">
+          </div>
+        </div>
+        <label class="field-label">Başlık — 1. Satır</label>
+        <input type="text" id="ev_title1" value="AÇILIŞ">
+        <label class="field-label">Başlık — 2. Satır (vurgulu)</label>
+        <input type="text" id="ev_title2" value="TÖRENİ">
+        <label class="field-label">Açıklama</label>
+        <textarea id="ev_desc" placeholder="Paragraflar arasına boş satır bırakarak ayırabilirsiniz.">Yeni hizmet binamızın açılışına tüm hemşehrilerimiz davetlidir.</textarea>
+        <div class="two-col">
+          <div>
+            <label class="field-label">Saat</label>
+            <input type="text" id="ev_time" value="14:00">
+          </div>
+          <div>
+            <label class="field-label">Konum</label>
+            <input type="text" id="ev_location" value="Merkez Meydan">
+          </div>
+        </div>
+      </div>
+
+      <!-- STAT FIELDS -->
+      <div class="field-group" data-fg="stat">
+        <label class="field-label">Başlık — 1. Satır</label>
+        <input type="text" id="s_title1" value="BİR YILDA">
+        <label class="field-label">Başlık — 2. Satır (vurgulu)</label>
+        <input type="text" id="s_title2" value="BAŞARDIKLARIMIZ">
+        <label class="field-label">Açıklama</label>
+        <textarea id="s_desc" placeholder="Paragraflar arasına boş satır bırakarak ayırabilirsiniz.">Kararlılıkla çalıştık, somut sonuçlar ürettik.</textarea>
+
+        <div class="two-col">
+          <div>
+            <label class="field-label">Rakam 1</label>
+            <input type="text" id="s1_num" value="120+">
+          </div>
+          <div>
+            <label class="field-label">Etiket 1</label>
+            <input type="text" id="s1_label" value="TAMAMLANAN PROJE">
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <label class="field-label">Rakam 2</label>
+            <input type="text" id="s2_num" value="45K">
+          </div>
+          <div>
+            <label class="field-label">Etiket 2</label>
+            <input type="text" id="s2_label" value="VATANDAŞA ULAŞIM">
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <label class="field-label">Rakam 3</label>
+            <input type="text" id="s3_num" value="%98">
+          </div>
+          <div>
+            <label class="field-label">Etiket 3</label>
+            <input type="text" id="s3_label" value="MEMNUNİYET ORANI">
+          </div>
+        </div>
+        <label class="field-label">Alt Slogan</label>
+        <input type="text" id="s_tag" value="HEP BİRLİKTE BAŞARDIK">
+      </div>
+
+      <!-- MINIMAL FIELDS -->
+      <div class="field-group" data-fg="minimal">
+        <label class="field-label">Üst Küçük Etiket</label>
+        <input type="text" id="m_eyebrow" value="DUYURU">
+        <label class="field-label">Başlık — 1. Satır</label>
+        <input type="text" id="m_title1" value="YENİ DÖNEM">
+        <label class="field-label">Başlık — 2. Satır (vurgulu)</label>
+        <input type="text" id="m_title2" value="BAŞLIYOR">
+        <label class="field-label">Açıklama</label>
+        <textarea id="m_desc" placeholder="Paragraflar arasına boş satır bırakarak ayırabilirsiniz.">Detaylar ve başvuru koşulları için web sitemizi ziyaret edin.</textarea>
+        <label class="field-label">Alt Bilgi</label>
+        <input type="text" id="m_footer" value="BAŞVURULAR AÇILDI">
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- STEP 6: AI CAPTION -->
+    <div class="section">
+      <div class="section-head"><span class="num">6</span><h2>AI Açıklama & Hashtag</h2></div>
+      <button class="ai-btn" id="aiGenBtn">✨ Yapay Zeka ile Oluştur</button>
+      <p class="ai-status" id="aiStatus"></p>
+      <div class="ai-result" id="aiResult" style="display:none;">
+        <label class="field-label">Gönderi Açıklaması</label>
+        <textarea id="aiCaption" style="min-height:110px;" readonly></textarea>
+        <label class="field-label">Hashtagler</label>
+        <textarea id="aiHashtags" readonly></textarea>
+        <button class="copy-btn" id="aiCopyBtn">📋 Açıklama + Hashtag Kopyala</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="format-toggle">
+      <div class="format-btn active" data-fmt="png">PNG (Kaliteli)</div>
+      <div class="format-btn" data-fmt="jpeg">JPG (Küçük Boyut)</div>
+    </div>
+    <button class="download-btn" id="downloadBtn">Gönderiyi İndir</button>
+
+    <button class="full-export-btn" id="fullExportBtn">🚀 Full Export — Hepsi Bir Arada</button>
+    <p class="full-export-note">Tek tıkla: Gönderiyi indirir (tekli/çiftli) + Hikaye (9:16) formatını ayrıca indirir + açıklama &amp; hashtag'i panoya kopyalar.</p>
+
+    <button class="secondary-btn" id="copyImgBtn">📋 Görseli Panoya Kopyala</button>
+    <p class="hint" id="hintText">2160 × 2700 px — Instagram gönderileri için yüksek çözünürlüklü, optimum boyut.<br>Tüm değişiklikler sağdaki önizlemede anlık görünür.</p>
+  </aside>
+
+  <!-- ============ PREVIEW STAGE ============ -->
+  <main class="stage">
+    <div class="slide-switch" id="slideSwitch" style="display:none;">
+      <button class="slide-btn active" type="button" data-slide="1">1. Görsel</button>
+      <button class="slide-btn" type="button" data-slide="2">2. Görsel — Detaylar</button>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="canvas" width="2160" height="2700"></canvas>
+    </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  // ---------- GÜNCEL TARİH (sabit format, saat yok) ----------
+  const TR_AYLAR = ['OCAK','ŞUBAT','MART','NİSAN','MAYIS','HAZİRAN','TEMMUZ','AĞUSTOS','EYLÜL','EKİM','KASIM','ARALIK'];
+  function bugununTarihi(){
+    const d = new Date();
+    const gun = String(d.getDate()).padStart(2,'0');
+    const ay = TR_AYLAR[d.getMonth()];
+    const yil = d.getFullYear();
+    return gun + ' ' + ay + ' ' + yil; // örnek: 07 TEMMUZ 2026
+  }
+  // dosya adlarına eklemek için: aynı gönderiyi birden fazla kez indirince dosyaların
+  // birbirinin üzerine yazılmaması / hangisinin en güncel olduğunun anlaşılması için saat-dakika damgası
+  function suanSaatDamgasi(){
+    const d = new Date();
+    const s = String(d.getHours()).padStart(2,'0');
+    const dk = String(d.getMinutes()).padStart(2,'0');
+    return s + dk; // örnek: 1437
+  }
+  const bDateEl = document.getElementById('b_date');
+  if (bDateEl) bDateEl.value = bugununTarihi();
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d', { alpha: false, willReadFrequently: false });
+  let W = canvas.width, H = canvas.height;
+
+  // En yüksek görsel kalite için yumuşatma ayarları — canvas boyutu her değiştiğinde
+  // (oran değişimi vb.) tarayıcı bu ayarları sıfırlayabildiği için ayrı bir fonksiyona alındı.
+  function applyQualitySettings(){
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+  }
+  applyQualitySettings();
+
+  const THEMES = [
+    { name:'Kızıl & Altın',     bg:'#111111', accent:'#C1121F', accent2:'#D4AF37', text:'#ffffff', sub:'#c9c5bb', dark:true },
+    { name:'Lacivert & Çelik',  bg:'#0B1220', accent:'#1E4E8C', accent2:'#8FB8E0', text:'#ffffff', sub:'#c3cddb', dark:true },
+    { name:'Zümrüt & Altın',    bg:'#0B1B14', accent:'#166534', accent2:'#D4AF37', text:'#ffffff', sub:'#c7d3cb', dark:true },
+    { name:'Mor & Neon',        bg:'#160B21', accent:'#7C3AED', accent2:'#F2A6FF', text:'#ffffff', sub:'#d3c6de', dark:true },
+    { name:'Turuncu & Antrasit',bg:'#141414', accent:'#E85D04', accent2:'#FFD166', text:'#ffffff', sub:'#c9c5bb', dark:true },
+    { name:'Petrol & Bakır',    bg:'#0B1B1F', accent:'#0E7C86', accent2:'#D98E4A', text:'#ffffff', sub:'#c3d3d4', dark:true },
+    { name:'Bordo & Bronz',     bg:'#1A0E12', accent:'#8C1C34', accent2:'#C99B57', text:'#ffffff', sub:'#d9c9cd', dark:true },
+    { name:'Krem & Lacivert',   bg:'#F3EFE6', accent:'#1E3A5F', accent2:'#B08D57', text:'#1b2430', sub:'#55606e', dark:false }
+  ];
+
+  // Not: değerler eski sürüme göre 2x büyütüldü (2160px temel genişlik) — daha keskin/net görsel çıktısı için.
+  const RATIOS = { square:{w:2160,h:2160}, portrait:{w:2160,h:2700}, story:{w:2160,h:3840}, landscape:{w:2160,h:1132} };
+
+  const state = {
+    ratio: 'portrait',
+    template:'breaking',
+    themeIdx:0,
+    brand: 'HABER-İ REİS',
+    website: '@haberireis',
+    logoImg: null,
+    heroImg: null,
+    secondSlide: true,
+    activeSlide: 1
+  };
+  // 2. görsel (detaylar) yalnızca kare ve dikey formatlarda desteklenir
+  const SECOND_SLIDE_RATIOS = ['square','portrait'];
+
+  // ölçek faktörü — artık sadece yüksekliğe değil, alana (W×H) göre hesaplanıyor.
+  // Böylece kare/yatay gibi geniş-ama-kısa formatlarda yazı/boşluklar çok küçük kalmıyor,
+  // story gibi dar-ama-uzun formatlarda ise aşırı büyümüyor: her format kendi en-boy oranına
+  // göre daha dengeli/optimize görünüyor. 1080×1350 orijinal tasarımın referans alanıdır.
+  function vs(){ return Math.sqrt((W*H)/(1080*1350)); }
+  function V(px){ return px*vs(); }
+  function F(px){ return Math.max(9, Math.round(px*vs())); }
+
+  // ---------- RATIO SWITCH ----------
+  document.querySelectorAll('.ratio-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.ratio-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      state.ratio = btn.dataset.ratio;
+      const r = RATIOS[state.ratio];
+      canvas.width = r.w; canvas.height = r.h;
+      W = canvas.width; H = canvas.height;
+      applyQualitySettings();
+      document.getElementById('hintText').innerHTML =
+        r.w + ' × ' + r.h + ' px — bu format için optimum boyut.<br>Tüm değişiklikler sağdaki önizlemede anlık görünür.';
+      updateSecondSlideAvailability();
+      fitCanvas();
+      render();
+    });
+  });
+
+  // ---------- 2. GÖRSEL (DETAYLAR SAYFASI) ----------
+  const secondSlideToggle = document.getElementById('secondSlideToggle');
+  const secondSlideFields = document.getElementById('secondSlideFields');
+  const secondSlideNote = document.getElementById('secondSlideNote');
+  const slideSwitchEl = document.getElementById('slideSwitch');
+  const detailTextEl = document.getElementById('detailText');
+
+  function secondSlideSupported(){ return SECOND_SLIDE_RATIOS.indexOf(state.ratio) > -1; }
+
+  function updateSecondSlideAvailability(){
+    const supported = secondSlideSupported();
+    secondSlideToggle.disabled = !supported;
+    secondSlideNote.style.display = supported ? 'none' : 'block';
+    if (!supported && state.secondSlide){
+      state.secondSlide = false;
+      secondSlideToggle.checked = false;
+      setActiveSlide(1);
+    }
+    const on = supported && state.secondSlide;
+    secondSlideFields.style.display = on ? 'block' : 'none';
+    slideSwitchEl.style.display = on ? 'flex' : 'none';
+  }
+
+  function setActiveSlide(n){
+    state.activeSlide = n;
+    document.querySelectorAll('.slide-btn').forEach(b=> b.classList.toggle('active', Number(b.dataset.slide) === n));
+    render();
+  }
+
+  secondSlideToggle.addEventListener('change', ()=>{
+    state.secondSlide = secondSlideToggle.checked;
+    updateSecondSlideAvailability();
+    setActiveSlide(1);
+  });
+
+  document.querySelectorAll('.slide-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> setActiveSlide(Number(btn.dataset.slide)));
+  });
+
+  detailTextEl.addEventListener('input', ()=>{ if (state.activeSlide === 2) render(); });
+
+  updateSecondSlideAvailability();
+
+  // ---------- THEME SWATCHES ----------
+  const themeRow = document.getElementById('themeRow');
+  THEMES.forEach((t,i)=>{
+    const el = document.createElement('div');
+    el.className = 'theme-swatch' + (i===0 ? ' active' : '');
+    el.title = t.name;
+    el.style.background = t.bg;
+    el.innerHTML = `<span style="background:${t.accent}"></span><span style="background:${t.accent2}"></span>`;
+    el.addEventListener('click', ()=>{
+      state.themeIdx = i;
+      document.querySelectorAll('.theme-swatch').forEach(s=>s.classList.remove('active'));
+      el.classList.add('active');
+      applyThemeToUI(t);
+      render();
+    });
+    themeRow.appendChild(el);
+  });
+
+  function applyThemeToUI(t){
+    document.documentElement.style.setProperty('--accent', t.accent);
+    document.documentElement.style.setProperty('--accent2', t.accent2);
+  }
+  applyThemeToUI(THEMES[0]);
+
+  // ---------- TEMPLATE SWITCH ----------
+  document.querySelectorAll('.tpl-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.tpl-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      state.template = btn.dataset.tpl;
+      document.querySelectorAll('.field-group').forEach(fg=>{
+        fg.classList.toggle('active', fg.dataset.fg === state.template);
+      });
+      render();
+    });
+  });
+
+  // ---------- GENERIC INPUT BINDING ----------
+  function bindText(id, cb){
+    const el = document.getElementById(id);
+    el.addEventListener('input', ()=>{ cb(el.value); render(); });
+  }
+  bindText('brandName', v=> state.brand = v);
+  bindText('website', v=> state.website = v);
+
+  // trigger re-render on any field in the field-groups
+  document.querySelectorAll('.field-group input, .field-group textarea').forEach(el=>{
+    el.addEventListener('input', render);
+  });
+
+  // ---------- IMAGE UPLOADS ----------
+  function loadImgFile(inputEl, thumbEl, onLoaded){
+    inputEl.addEventListener('change', (e)=>{
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev)=>{
+        const img = new Image();
+        img.onload = ()=>{
+          onLoaded(img);
+          thumbEl.src = ev.target.result;
+          render();
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+  loadImgFile(document.getElementById('logoInput'), document.getElementById('logoThumb'), img=> state.logoImg = img);
+  loadImgFile(document.getElementById('imgInput'), document.getElementById('imgThumb'), img=> state.heroImg = img);
+
+  // ---------- VARSAYILAN LOGO ----------
+  const DEFAULT_LOGO_URL = 'https://haberireis.github.io/create/logo.png';
+  (async function loadDefaultLogo(){
+    const img = await loadImageFromUrl(DEFAULT_LOGO_URL);
+    if (img && !state.logoImg){
+      state.logoImg = img;
+      const logoThumb = document.getElementById('logoThumb');
+      if (logoThumb) logoThumb.src = img.src;
+      render();
+    }
+  })();
+
+  // ---------- CANVAS HELPERS ----------
+  function roundRect(x,y,w,h,r){
+    if (typeof r === 'number') r = {tl:r,tr:r,br:r,bl:r};
+    ctx.beginPath();
+    ctx.moveTo(x+r.tl,y);
+    ctx.lineTo(x+w-r.tr,y);
+    ctx.arcTo(x+w,y,x+w,y+r.tr,r.tr);
+    ctx.lineTo(x+w,y+h-r.br);
+    ctx.arcTo(x+w,y+h,x+w-r.br,y+h,r.br);
+    ctx.lineTo(x+r.bl,y+h);
+    ctx.arcTo(x,y+h,x,y+h-r.bl,r.bl);
+    ctx.lineTo(x,y+r.tl);
+    ctx.arcTo(x,y,x+r.tl,y,r.tl);
+    ctx.closePath();
+  }
+
+  function drawCover(img, x, y, w, h, enhance){
+    const ir = img.width / img.height;
+    const tr = w / h;
+    let sx, sy, sw, sh;
+    if (ir > tr){
+      sh = img.height; sw = sh * tr;
+      sx = (img.width - sw)/2; sy = 0;
+    } else {
+      sw = img.width; sh = sw / tr;
+      sx = 0; sy = (img.height - sh)/2;
+    }
+    // arka plan/haber görselleri için hafif kontrast+doygunluk desteği: yüklenen fotoğraf
+    // düşük çözünürlüklü/sönük olsa bile ekranda daha canlı ve net görünür (logo hariç).
+    if (enhance !== false){
+      ctx.save();
+      ctx.filter = 'contrast(1.06) saturate(1.12) brightness(1.02)';
+      ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+      ctx.restore();
+    } else {
+      ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+    }
+  }
+
+  // ---------- KIRPMASIZ AKILLI SIGDIRMA ----------
+  // Haber/arka plan gorsellerinin kirpilip anlam butunlugunun bozulmasini onlemek icin:
+  // 1) Kutuyu uctan uca dolduran, gorselin kendisinden uretilmis bulanik+koyultulmus bir "cover"
+  //    katman ciziyoruz (bosluk/serit kalmamasi, kirpilan kismin da ekrani doldurmasi icin).
+  // 2) Uzerine gorselin TAMAMINI (contain - hic kirpmadan) net ve yuksek kalitede yerlestiriyoruz.
+  // Sonuc: ekran uctan uca dolu gorunur ama orijinal fotografin hicbir parcasi kaybolmaz.
+  function drawFit(img, x, y, w, h, enhance){
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(x, y, w, h);
+    ctx.clip();
+
+    // 1) Dolgu katmani: bulanik + koyu, kirpilmis kopya (yalnizca bosluk doldurma amacli)
+    const blurPx = Math.max(w, h) * 0.045;
+    ctx.save();
+    ctx.filter = `blur(${blurPx}px) brightness(0.6) saturate(1.15)`;
+    const bleed = blurPx * 2.2;
+    drawCover(img, x - bleed, y - bleed, w + bleed*2, h + bleed*2, false);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';
+    ctx.fillRect(x, y, w, h);
+
+    // 2) Ana katman: gorselin tamami, hic kirpilmadan (contain)
+    const ir = img.width / img.height;
+    const tr = w / h;
+    let dw, dh;
+    if (ir > tr){ dw = w; dh = w / ir; } else { dh = h; dw = h * ir; }
+    const dx = x + (w - dw) / 2;
+    const dy = y + (h - dh) / 2;
+    if (enhance !== false){
+      ctx.filter = 'contrast(1.06) saturate(1.12) brightness(1.02)';
+    } else {
+      ctx.filter = 'none';
+    }
+    ctx.drawImage(img, dx, dy, dw, dh);
+    ctx.filter = 'none';
+    ctx.restore();
+  }
+
+  function placeholderFill(x,y,w,h,theme,label){
+    const grd = ctx.createLinearGradient(x,y,x+w,y+h);
+    grd.addColorStop(0, shade(theme.bg, 18));
+    grd.addColorStop(1, shade(theme.bg, -6));
+    ctx.fillStyle = grd;
+    ctx.fillRect(x,y,w,h);
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x+4,y+4,w-8,h-8);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = F(26)+'px Montserrat';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(label, x+w/2, y+h/2);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  function shade(hex, percent){
+    const n = parseInt(hex.slice(1),16);
+    let r = (n>>16)+Math.round(2.55*percent);
+    let g = ((n>>8)&0xff)+Math.round(2.55*percent);
+    let b = (n&0xff)+Math.round(2.55*percent);
+    r=Math.max(0,Math.min(255,r)); g=Math.max(0,Math.min(255,g)); b=Math.max(0,Math.min(255,b));
+    return '#'+(0x1000000+r*0x10000+g*0x100+b).toString(16).slice(1);
+  }
+
+  function hexA(hex, a){
+    const n = parseInt(hex.slice(1),16);
+    const r=(n>>16)&0xff, g=(n>>8)&0xff, b=n&0xff;
+    return `rgba(${r},${g},${b},${a})`;
+  }
+
+  function getWrapped(text, font, maxWidth){
+    ctx.font = font;
+    const words = String(text).split(/\s+/).filter(Boolean);
+    const lines = [];
+    let cur = '';
+    words.forEach(word=>{
+      const test = cur ? cur + ' ' + word : word;
+      if (ctx.measureText(test).width > maxWidth && cur){
+        lines.push(cur);
+        cur = word;
+      } else {
+        cur = test;
+      }
+    });
+    if (cur) lines.push(cur);
+    return lines.length ? lines : [''];
+  }
+
+  // Paragraf destekli metin sarma: kullanıcı metinde boş satır bırakarak (çift enter) paragraf
+  // ayrımı yapabilir; her paragraf kendi içinde normal şekilde sarılır, paragraflar arasına
+  // görsel boşluk bırakmak için boş bir "satır" eklenir (drawLines onu olduğu gibi atlar/boşluk bırakır).
+  function getWrappedParagraphs(text, font, maxWidth){
+    const paragraphs = String(text).replace(/\r\n/g,'\n').split(/\n+/).map(p=>p.trim()).filter(p=>p.length>0);
+    if (!paragraphs.length) return [''];
+    const lines = [];
+    paragraphs.forEach((para,i)=>{
+      lines.push(...getWrapped(para, font, maxWidth));
+      if (i < paragraphs.length-1) lines.push('');
+    });
+    return lines;
+  }
+
+  function drawLines(lines, x, y, lineHeight, align){
+    align = align || 'left';
+    const prevAlign = ctx.textAlign;
+    ctx.textAlign = align;
+    lines.forEach((line,i)=>{
+      ctx.fillText(line, x, y + i*lineHeight);
+    });
+    ctx.textAlign = prevAlign;
+    return y + lines.length*lineHeight;
+  }
+
+  // ---------- OTOMATİK METİN SIĞDIRMA (AUTO-FIT) ----------
+  // Metin kutuya sığmıyorsa font boyutunu kademeli küçültür; en küçük boyutta bile
+  // sığmazsa son satırı "…" ile keser. Kısa/varsayılan metinlerde davranış DEĞİŞMEZ —
+  // metin zaten maksimum boyutta sığdığı için hiç küçülmez, sadece uzun girişlerde devreye girer.
+  function shrinkStep(px){ return Math.max(1, Math.round(px*0.045)); }
+
+  function truncateToLines(lines, maxLines, font, maxWidth){
+    if (lines.length <= maxLines) return lines;
+    ctx.font = font;
+    const cut = lines.slice(0, Math.max(1,maxLines));
+    let last = cut[cut.length-1].replace(/\s+$/,'');
+    while (last.length > 1 && ctx.measureText(last+'…').width > maxWidth){
+      last = last.slice(0, -1).replace(/\s+$/,'');
+    }
+    cut[cut.length-1] = last + '…';
+    return cut;
+  }
+
+  // Detay sayfasındaki tek düze/yeknesak metin hissini kırmak için: metnin ilk cümlesini
+  // ayırıp daha büyük/kalın bir "giriş cümlesi" (lede) olarak, geri kalanını ise normal
+  // gövde metni olarak döndürür. Uygun bir cümle sonu bulunamazsa ilk ~140 karakteri
+  // kelime sınırından böler.
+  function splitLede(text){
+    const clean = String(text||'').trim();
+    if (!clean) return { lede:'', rest:'' };
+    const m = clean.match(/^([\s\S]{0,220}?[.!?…])(\s+|$)([\s\S]*)$/);
+    if (m && m[1].trim().length > 0){
+      return { lede: m[1].trim(), rest: m[3].trim() };
+    }
+    const words = clean.split(/\s+/);
+    let lede = '', i = 0;
+    for (; i < words.length; i++){
+      const test = lede ? lede+' '+words[i] : words[i];
+      if (test.length > 140 && lede) break;
+      lede = test;
+    }
+    return { lede, rest: words.slice(i).join(' ') };
+  }
+
+  // Tek bir metin bloğunu (açıklama, alıntı metni...) verilen genişlik/yükseklik kutusuna sığdırır.
+  function fitTextBlock(text, opts){
+    const family = opts.family || 'Montserrat';
+    const weight = opts.weight || '600';
+    const fam = family.indexOf(' ') > -1 && family[0] !== "'" ? "'"+family+"'" : family;
+    const maxWidth = opts.maxWidth;
+    const lineHeightRatio = opts.lineHeightRatio || 1.3;
+    const maxFontPx = opts.maxFontPx;
+    const minFontPx = Math.max(opts.absMin || 13, Math.round(maxFontPx * (opts.minRatio != null ? opts.minRatio : 0.58)));
+    const maxLines = opts.maxLines || 8;
+    const maxHeight = opts.maxHeight == null ? Infinity : opts.maxHeight;
+
+    let fontPx = maxFontPx, lines, lineHeight, font;
+    const wrapFn = opts.paragraphs ? getWrappedParagraphs : getWrapped;
+    while(true){
+      font = weight+' '+fontPx+'px '+fam;
+      lines = wrapFn(String(text==null?'':text).trim(), font, maxWidth);
+      lineHeight = Math.max(1, Math.round(fontPx*lineHeightRatio));
+      const fitsLines = lines.length <= maxLines;
+      const fitsHeight = (lines.length*lineHeight) <= maxHeight;
+      if ((fitsLines && fitsHeight) || fontPx <= minFontPx) break;
+      fontPx -= shrinkStep(fontPx);
+    }
+    const effMaxLines = Math.max(1, Math.min(maxLines, Math.floor(maxHeight/lineHeight) || 1));
+    lines = truncateToLines(lines, effMaxLines, font, maxWidth);
+    return { fontPx, lineHeight, lines, font };
+  }
+
+  // Aynı font boyutunu paylaşan birden fazla metni (örn. iki satırlık başlık: title1 + title2)
+  // birlikte tek bir kutuya sığdırır — böylece ikisi de görsel olarak tutarlı boyutta kalır.
+  function fitMultiBlock(texts, opts){
+    const family = opts.family || "'Bebas Neue'";
+    const weight = opts.weight || '700';
+    const maxWidth = opts.maxWidth;
+    const lineHeightRatio = opts.lineHeightRatio || 1.09;
+    const maxFontPx = opts.maxFontPx;
+    const minFontPx = Math.max(opts.absMin || 20, Math.round(maxFontPx * (opts.minRatio != null ? opts.minRatio : 0.5)));
+    const maxLines = opts.maxLines || 6;
+    const maxHeight = opts.maxHeight == null ? Infinity : opts.maxHeight;
+
+    let fontPx = maxFontPx, linesArr, lineHeight, font;
+    while(true){
+      font = weight+' '+fontPx+'px '+family;
+      linesArr = texts.map(t=> getWrapped(String(t==null?'':t).trim(), font, maxWidth));
+      lineHeight = Math.max(1, Math.round(fontPx*lineHeightRatio));
+      const total = linesArr.reduce((a,l)=>a+l.length,0);
+      const fitsLines = total <= maxLines;
+      const fitsHeight = (total*lineHeight) <= maxHeight;
+      if ((fitsLines && fitsHeight) || fontPx <= minFontPx) break;
+      fontPx -= shrinkStep(fontPx);
+    }
+    return { fontPx, lineHeight, linesArr, font };
+  }
+
+  // Tek satırlık metinleri (rozet, alt bilgi, marka adı, rakamlar...) verilen genişliğe sığdırır (satır atlamaz).
+  function fitSingleLine(text, opts){
+    const family = opts.family || 'Montserrat';
+    const weight = opts.weight || '700';
+    const fam = family.indexOf(' ') > -1 && family[0] !== "'" ? "'"+family+"'" : family;
+    const maxWidth = opts.maxWidth;
+    const maxFontPx = opts.maxFontPx;
+    const minFontPx = Math.max(opts.absMin || 11, Math.round(maxFontPx * (opts.minRatio != null ? opts.minRatio : 0.55)));
+    const str = String(text==null?'':text);
+
+    let fontPx = maxFontPx, font, w;
+    while(true){
+      font = weight+' '+fontPx+'px '+fam;
+      ctx.font = font;
+      w = ctx.measureText(str).width;
+      if (w <= maxWidth || fontPx <= minFontPx) break;
+      fontPx -= shrinkStep(fontPx);
+    }
+    return { fontPx, font, width: w };
+  }
+
+  function drawLogo(cx, cy, r, theme){
+    ctx.save();
+
+    // dış yumuşak gölge (rozete derinlik katar)
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.5)';
+    ctx.shadowBlur = V(16);
+    ctx.shadowOffsetY = V(5);
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.fillStyle = shade(theme.bg, theme.dark ? -10 : -4);
+    ctx.fill();
+    ctx.restore();
+
+    // ince dış parlaklık halkası
+    ctx.beginPath();
+    ctx.arc(cx,cy,r+V(3),0,Math.PI*2);
+    ctx.lineWidth = V(1.5);
+    ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+    ctx.stroke();
+
+    // gradyanlı ana çerçeve (accent → accent2), premium madalyon hissi
+    const ringGrad = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
+    ringGrad.addColorStop(0, theme.accent);
+    ringGrad.addColorStop(1, theme.accent2);
+    ctx.beginPath();
+    ctx.arc(cx,cy,r,0,Math.PI*2);
+    ctx.lineWidth = V(3.5);
+    ctx.strokeStyle = ringGrad;
+    ctx.stroke();
+
+    // iç dolgu + görsel/baş harfler (hafif boşluklu iç halka ile ayrılır)
+    const innerR = r - V(7);
+    ctx.beginPath();
+    ctx.arc(cx,cy,innerR,0,Math.PI*2);
+    ctx.closePath();
+    ctx.save();
+    ctx.fillStyle = shade(theme.bg, theme.dark ? 14 : -10);
+    ctx.fill();
+    ctx.clip();
+    if (state.logoImg){
+      drawCover(state.logoImg, cx-innerR, cy-innerR, innerR*2, innerR*2, false);
+      // hafif iç vinyet: kenarlara doğru yumuşak koyulaşma, cam/madalyon derinliği
+      const vin = ctx.createRadialGradient(cx,cy,innerR*0.55,cx,cy,innerR);
+      vin.addColorStop(0,'rgba(0,0,0,0)');
+      vin.addColorStop(1,'rgba(0,0,0,0.28)');
+      ctx.fillStyle = vin;
+      ctx.fillRect(cx-innerR,cy-innerR,innerR*2,innerR*2);
+    } else {
+      const initials = (state.brand || 'HR')
+        .split(/[\s-]+/).filter(Boolean)
+        .map(w=>w[0]).join('').toUpperCase().slice(0,2) || 'HR';
+      ctx.fillStyle = theme.accent2;
+      ctx.font = '700 '+F(32)+'px Bebas Neue';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(initials, cx, cy+2);
+    }
+    ctx.restore();
+
+    // en üstte çok ince parlama vurgusu (üst-sol), cam/parlak yüzey hissi
+    const shine = ctx.createLinearGradient(cx-innerR, cy-innerR, cx, cy);
+    shine.addColorStop(0, 'rgba(255,255,255,0.16)');
+    shine.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath();
+    ctx.arc(cx,cy,innerR,0,Math.PI*2);
+    ctx.closePath();
+    ctx.save();
+    ctx.clip();
+    ctx.fillStyle = shine;
+    ctx.fillRect(cx-innerR,cy-innerR,innerR*2,innerR);
+    ctx.restore();
+
+    ctx.restore();
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  function bottomBar(theme, leftText, rightText, y0){
+    ctx.fillStyle = theme.accent2;
+    ctx.fillRect(0, y0, W, Math.max(2,V(3)));
+    ctx.fillStyle = shade(theme.bg, theme.dark ? -8 : 4);
+    ctx.fillRect(0, y0+V(3), W, H-(y0+V(3)));
+    const halfW = Math.max(60, W/2 - V(90));
+    const leftFit = fitSingleLine(leftText, {maxFontPx:F(24), minRatio:0.6, maxWidth:halfW, family:'Montserrat', weight:'700'});
+    const rightFit = fitSingleLine(rightText, {maxFontPx:F(24), minRatio:0.6, maxWidth:halfW, family:'Montserrat', weight:'700'});
+    ctx.fillStyle = theme.text;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    const midY = y0 + (H-y0)/2 + 2;
+    ctx.font = leftFit.font;
+    ctx.fillText(leftText, V(70), midY);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = theme.accent2;
+    ctx.font = rightFit.font;
+    ctx.fillText(rightText, W-V(70), midY);
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  // sağ üstte küçük "1/2" veya "2/2" sayfa göstergesi — bunun bir carousel'in devamı olduğunu belli eder
+  function drawPageLabel(theme, pageLabel){
+    ctx.font = '700 '+F(16)+'px Montserrat';
+    const plW = ctx.measureText(pageLabel).width + V(30);
+    const plH = V(38), plX = W-V(90)-plW, plY = V(96);
+    ctx.fillStyle = hexA(theme.accent2, 0.14);
+    roundRect(plX, plY, plW, plH, plH/2); ctx.fill();
+    ctx.save();
+    roundRect(plX, plY, plW, plH, plH/2);
+    ctx.lineWidth = 1; ctx.strokeStyle = hexA(theme.accent2, 0.4); ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = theme.accent2;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(pageLabel, plX+plW/2, plY+plH/2+1);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+
+  function footerCentered(theme, text, y){
+    ctx.strokeStyle = hexA(theme.accent2, 0.6);
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(W/2-140,y); ctx.lineTo(W/2-30,y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W/2+30,y); ctx.lineTo(W/2+140,y); ctx.stroke();
+    const fit = fitSingleLine(text, {maxFontPx:F(18), minRatio:0.6, maxWidth:W-V(200), family:'Montserrat', weight:'700'});
+    ctx.font = fit.font;
+    ctx.fillStyle = theme.sub;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, W/2, y);
+    ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  }
+
+  // ---------- TEMPLATE: BREAKING NEWS ----------
+  function drawBreaking(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    const imgH = H - V(450);
+    if (state.heroImg){
+      drawFit(state.heroImg, 0, 0, W, imgH);
+    } else {
+      placeholderFill(0,0,W,imgH,theme,'Haber görselini yükleyin');
+    }
+
+    // üst taraf: yumuşak, çok kademeli koyulaşma (logo/canlı rozeti okunurluğu için)
+    let g = ctx.createLinearGradient(0,0,0,V(260));
+    g.addColorStop(0,'rgba(0,0,0,0.62)');
+    g.addColorStop(0.55,'rgba(0,0,0,0.22)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,V(260));
+
+    // görselin alt kısmı: zemine kademeli, sinematik geçiş
+    g = ctx.createLinearGradient(0, imgH-V(360), 0, imgH);
+    g.addColorStop(0,'rgba(0,0,0,0)');
+    g.addColorStop(0.5, hexA(theme.bg,0.55));
+    g.addColorStop(1, theme.bg);
+    ctx.fillStyle = g; ctx.fillRect(0, imgH-V(360), W, V(360));
+
+    // hafif köşe vinyeti — fotoğrafa stüdyo/haber bülteni derinliği katar
+    const vin = ctx.createRadialGradient(W/2, imgH*0.48, imgH*0.32, W/2, imgH*0.48, Math.max(W,imgH)*0.75);
+    vin.addColorStop(0,'rgba(0,0,0,0)');
+    vin.addColorStop(1,'rgba(0,0,0,0.24)');
+    ctx.fillStyle = vin; ctx.fillRect(0,0,W,imgH);
+
+    drawLogo(V(145),V(145),V(58),theme);
+
+    // ---- SON DAKİKA şeridi: kenardan kenara, çentikli "yayın bülteni" rozeti ----
+    const badgeText = document.getElementById('b_badge').value.toUpperCase();
+    const badgeFit = fitSingleLine(badgeText, {maxFontPx:F(34), minRatio:0.6, maxWidth:W*0.5, family:'Montserrat', weight:'700'});
+    ctx.font = badgeFit.font;
+    const notch = V(22);
+    const bx = 0, by = imgH - V(340), bh = V(78);
+    const bw = badgeFit.width + V(88);
+
+    ctx.save();
+    ctx.shadowColor = hexA(theme.accent, 0.55);
+    ctx.shadowBlur = V(26);
+    ctx.shadowOffsetY = V(6);
+    const badgeGrad = ctx.createLinearGradient(bx,by,bx+bw+notch,by);
+    badgeGrad.addColorStop(0, shade(theme.accent, 12));
+    badgeGrad.addColorStop(1, shade(theme.accent, -18));
+    ctx.fillStyle = badgeGrad;
+    ctx.beginPath();
+    ctx.moveTo(bx,by);
+    ctx.lineTo(bx+bw,by);
+    ctx.lineTo(bx+bw+notch, by+bh/2);
+    ctx.lineTo(bx+bw, by+bh);
+    ctx.lineTo(bx,by+bh);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    // üst kenarda ince camsı parlaklık çizgisi
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(bx, by+1); ctx.lineTo(bx+bw, by+1);
+    ctx.strokeStyle = hexA('#ffffff', 0.3);
+    ctx.lineWidth = V(1.5);
+    ctx.stroke();
+    ctx.restore();
+
+    // nabız gibi atan "canlı" noktası + rozet metni
+    const dotCx = V(38), dotCy = by+bh/2;
+    ctx.beginPath(); ctx.arc(dotCx, dotCy, V(12), 0, Math.PI*2);
+    ctx.strokeStyle = hexA('#ffffff', 0.42); ctx.lineWidth = V(2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(dotCx, dotCy, V(6), 0, Math.PI*2);
+    ctx.fillStyle = '#fff'; ctx.fill();
+
+    ctx.fillStyle = '#fff';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(badgeText, dotCx+V(24), by+bh/2+2);
+    ctx.textBaseline = 'alphabetic';
+
+    let cursor = imgH + V(80);
+    const bottomLimit = H - V(70) - V(18); // alt bilgi çubuğunun üstü, biraz nefes payıyla
+    const titleFit = fitMultiBlock(
+      [document.getElementById('b_title1').value.toUpperCase(), document.getElementById('b_title2').value.toUpperCase()],
+      { maxFontPx:F(64), minRatio:0.5, maxWidth:W-V(180), lineHeightRatio:70/64, maxLines:5, maxHeight:(bottomLimit-cursor)*0.62 }
+    );
+    const titleTop = cursor;
+    ctx.font = titleFit.font;
+    ctx.fillStyle = '#ffffff';
+    cursor = drawLines(titleFit.linesArr[0], V(90), cursor, titleFit.lineHeight) + 4;
+    ctx.fillStyle = theme.accent2;
+    cursor = drawLines(titleFit.linesArr[1], V(90), cursor, titleFit.lineHeight);
+    const titleBottom = cursor;
+
+    // başlığın solunda ince aksan çubuğu: editoryal, dergi tarzı bir zarafet katar
+    const barTop = titleTop - titleFit.fontPx*0.78;
+    const barBottom = titleBottom + titleFit.fontPx*0.18;
+    const barGrad = ctx.createLinearGradient(0, barTop, 0, barBottom);
+    barGrad.addColorStop(0, theme.accent);
+    barGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = barGrad;
+    roundRect(V(90)-V(30), barTop, V(6), Math.max(barBottom-barTop, V(10)), V(3));
+    ctx.fill();
+
+    cursor += V(34);
+
+    // başlık ile açıklama arasında ince, yarı saydam ayraç çizgisi
+    ctx.beginPath();
+    ctx.moveTo(W/2 - V(70), cursor - V(20));
+    ctx.lineTo(W/2 + V(70), cursor - V(20));
+    ctx.strokeStyle = hexA(theme.accent2, 0.35);
+    ctx.lineWidth = V(2);
+    ctx.stroke();
+
+    const descFit = fitTextBlock(document.getElementById('b_desc').value, {
+      maxFontPx:F(28), minRatio:0.55, maxWidth:W-V(220), lineHeightRatio:38/28, maxLines:4, maxHeight:Math.max(bottomLimit-cursor, V(30))
+    });
+    ctx.font = descFit.font;
+    ctx.fillStyle = '#c9c5bb';
+    const descX = W/2;
+    ctx.textAlign = 'center';
+    descFit.lines.forEach((line,i)=> ctx.fillText(line, descX, cursor + i*descFit.lineHeight));
+    ctx.textAlign = 'left';
+
+    bottomBar(theme, '📅 ' + document.getElementById('b_date').value.toUpperCase(), state.website, H-V(70));
+  }
+
+  // ---------- TEMPLATE: PROJECT / SERVICE ----------
+  function drawProject(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    const leftW = 620;
+    const bottomBarH = V(170);
+    const imgY = 0, imgH = H - bottomBarH;
+
+    if (state.heroImg){
+      drawFit(state.heroImg, leftW, imgY, W-leftW, imgH);
+    } else {
+      placeholderFill(leftW, imgY, W-leftW, imgH, theme, 'Görsel yükleyin');
+    }
+
+    // görselden metne yumuşak, kademeli geçiş (eskisinden daha geniş ve doğal)
+    let g = ctx.createLinearGradient(leftW-220, 0, leftW+60, 0);
+    g.addColorStop(0, theme.bg);
+    g.addColorStop(0.6, hexA(theme.bg,0.55));
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(leftW-220, 0, 280, imgH);
+    // görselin üst/alt kenarlarında hafif vinyet — derinlik katar
+    g = ctx.createLinearGradient(0,0,0,V(180));
+    g.addColorStop(0,'rgba(0,0,0,0.35)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(leftW,0,W-leftW,V(180));
+    g = ctx.createLinearGradient(0,imgH-V(160),0,imgH);
+    g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(0,0,0,0.3)');
+    ctx.fillStyle = g; ctx.fillRect(leftW,imgH-V(160),W-leftW,V(160));
+    // sağ kenarda ince aksan çizgisi, görsel ile zemini zarifçe ayırır
+    ctx.fillStyle = hexA(theme.accent2, 0.5);
+    ctx.fillRect(leftW-V(2), 0, V(2), imgH);
+
+    drawLogo(V(145),V(145),V(55),theme);
+
+    let cursor = V(270);
+    const maxW = 470;
+    const barY = H - bottomBarH;
+    const availTD = barY - cursor; // başlık + açıklama + 3 özellik satırı için toplam pay
+
+    const titleFit = fitMultiBlock(
+      [document.getElementById('p_title1').value.toUpperCase(), document.getElementById('p_title2').value.toUpperCase()],
+      { maxFontPx:F(56), minRatio:0.55, maxWidth:maxW, lineHeightRatio:62/56, maxLines:4, maxHeight: availTD*0.34 }
+    );
+    const titleTop = cursor;
+    ctx.font = titleFit.font;
+    ctx.fillStyle = theme.text;
+    cursor = drawLines(titleFit.linesArr[0], V(90), cursor, titleFit.lineHeight) + 2;
+    ctx.fillStyle = theme.accent2;
+    cursor = drawLines(titleFit.linesArr[1], V(90), cursor, titleFit.lineHeight);
+    const titleBottom = cursor;
+
+    // başlığın solunda gradyanlı ince aksan çubuğu — editoryal, kurumsal bir zarafet
+    const barTop = titleTop - titleFit.fontPx*0.78;
+    const barBottom = titleBottom + titleFit.fontPx*0.18;
+    const titleBarGrad = ctx.createLinearGradient(0, barTop, 0, barBottom);
+    titleBarGrad.addColorStop(0, theme.accent);
+    titleBarGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = titleBarGrad;
+    roundRect(V(90)-V(30), barTop, V(6), Math.max(barBottom-barTop, V(10)), V(3));
+    ctx.fill();
+
+    cursor += V(36);
+
+    const descFit = fitTextBlock(document.getElementById('p_desc').value, {
+      maxFontPx:F(26), minRatio:0.6, maxWidth:maxW, lineHeightRatio:35/26, maxLines:3, maxHeight: availTD*0.20
+    });
+    ctx.font = descFit.font;
+    ctx.fillStyle = theme.sub;
+    cursor = drawLines(descFit.lines, V(90), cursor, descFit.lineHeight) + V(46);
+
+    // "ÖNE ÇIKANLAR" kicker etiketi + kısa gradyanlı çizgi, özellik listesine zarif bir giriş
+    ctx.font = '700 '+F(17)+'px Montserrat';
+    ctx.fillStyle = theme.accent2;
+    ctx.fillText('ÖNE ÇIKANLAR', V(90), cursor);
+    const kickerGrad = ctx.createLinearGradient(V(90),0,V(90)+V(70),0);
+    kickerGrad.addColorStop(0, theme.accent); kickerGrad.addColorStop(1, hexA(theme.accent2,0.3));
+    ctx.fillStyle = kickerGrad;
+    roundRect(V(90), cursor+V(14), V(70), Math.max(3,V(4)), V(2)); ctx.fill();
+    cursor += V(46);
+
+    const feats = [
+      [document.getElementById('p_f1i').value, document.getElementById('p_f1t').value, document.getElementById('p_f1d').value],
+      [document.getElementById('p_f2i').value, document.getElementById('p_f2t').value, document.getElementById('p_f2d').value],
+      [document.getElementById('p_f3i').value, document.getElementById('p_f3t').value, document.getElementById('p_f3d').value],
+    ];
+
+    feats.forEach(([icon,title,desc])=>{
+      const boxY = cursor;
+
+      // ikon rozeti: gradyanlı dolgu + yumuşak gölge, düz saydam kutudan daha premium
+      ctx.save();
+      ctx.shadowColor = hexA(theme.accent, 0.35);
+      ctx.shadowBlur = V(14);
+      ctx.shadowOffsetY = V(3);
+      const iconGrad = ctx.createLinearGradient(V(90),boxY,V(90)+V(52),boxY+V(52));
+      iconGrad.addColorStop(0, hexA(theme.accent,0.9));
+      iconGrad.addColorStop(1, hexA(theme.accent2,0.85));
+      ctx.fillStyle = iconGrad;
+      roundRect(V(90), boxY, V(52), V(52), V(13)); ctx.fill();
+      ctx.restore();
+      ctx.font = F(28)+'px sans-serif';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(icon, V(90)+V(26), boxY+V(27));
+      ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+
+      const titleFitS = fitSingleLine(title.toUpperCase(), {maxFontPx:F(26), minRatio:0.6, maxWidth:400, family:"'Bebas Neue'", weight:'700'});
+      ctx.font = titleFitS.font;
+      ctx.fillStyle = theme.text;
+      ctx.fillText(title.toUpperCase(), V(162), boxY+V(22));
+
+      const dl = fitTextBlock(desc, {maxFontPx:F(20), minRatio:0.7, maxWidth:400, lineHeightRatio:26/20, maxLines:2, maxHeight:V(58), weight:'500'});
+      ctx.font = dl.font;
+      ctx.fillStyle = theme.sub;
+      drawLines(dl.lines, V(162), boxY+V(48), dl.lineHeight);
+
+      cursor = boxY + Math.max(V(52), V(26)+dl.lines.length*dl.lineHeight) + V(34);
+    });
+
+    // alt slogan çubuğu: gradyanlı zemin + yukarıya doğru yumuşak gölge, düz banttan daha derinlikli
+    ctx.save();
+    ctx.shadowColor = 'rgba(0,0,0,0.3)';
+    ctx.shadowBlur = V(20);
+    ctx.shadowOffsetY = -V(4);
+    ctx.fillStyle = shade(theme.bg, theme.dark ? -8 : 4);
+    ctx.fillRect(0, barY+V(3), W, bottomBarH-V(3));
+    ctx.restore();
+    const topLineGrad = ctx.createLinearGradient(0,0,W,0);
+    topLineGrad.addColorStop(0, theme.accent); topLineGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = topLineGrad;
+    ctx.fillRect(0, barY, W, Math.max(2,V(3)));
+
+    const tagFit = fitTextBlock(document.getElementById('p_tag').value.toUpperCase(), {
+      maxFontPx:F(34), minRatio:0.55, maxWidth:W-140, lineHeightRatio:38/34, maxLines:3, maxHeight:bottomBarH-V(30),
+      family:"'Bebas Neue'", weight:'700'
+    });
+    ctx.font = tagFit.font;
+    ctx.fillStyle = theme.text;
+    ctx.textAlign = 'center';
+    const tagY = barY + bottomBarH/2 - ((tagFit.lines.length-1)*tagFit.lineHeight)/2 + 10;
+    tagFit.lines.forEach((line,i)=> ctx.fillText(line, W/2, tagY + i*tagFit.lineHeight));
+    ctx.textAlign = 'left';
+  }
+
+  // ---------- TEMPLATE: QUOTE ----------
+  function drawQuote(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    if (state.heroImg){
+      drawFit(state.heroImg, 0,0,W,H);
+    } else {
+      placeholderFill(0,0,W,H,theme,'Arka plan görseli yükleyin');
+    }
+
+    ctx.fillStyle = 'rgba(0,0,0,0.4)';
+    ctx.fillRect(0,0,W,H);
+    let g = ctx.createLinearGradient(0,H-V(460),0,H);
+    g.addColorStop(0,'rgba(0,0,0,0)');
+    g.addColorStop(0.55,'rgba(0,0,0,0.55)');
+    g.addColorStop(1,'rgba(0,0,0,0.8)');
+    ctx.fillStyle = g; ctx.fillRect(0,H-V(460),W,V(460));
+    g = ctx.createLinearGradient(0,0,0,V(240));
+    g.addColorStop(0,'rgba(0,0,0,0.55)');
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,V(240));
+    // yumuşak köşe vinyeti — gözü metne odaklayan sinematik derinlik
+    const vin = ctx.createRadialGradient(W/2,H*0.45,Math.min(W,H)*0.25,W/2,H*0.45,Math.max(W,H)*0.72);
+    vin.addColorStop(0,'rgba(0,0,0,0)');
+    vin.addColorStop(1,'rgba(0,0,0,0.32)');
+    ctx.fillStyle = vin; ctx.fillRect(0,0,W,H);
+
+    drawLogo(V(145),V(145),V(55),theme);
+
+    // tırnak işareti: gradyanlı dolgu + yumuşak parlama, düz renkten daha zarif
+    ctx.save();
+    ctx.shadowColor = hexA(theme.accent2, 0.55);
+    ctx.shadowBlur = V(28);
+    const quoteGrad = ctx.createLinearGradient(V(82),V(500),V(82),V(660));
+    quoteGrad.addColorStop(0, theme.accent2);
+    quoteGrad.addColorStop(1, hexA(theme.accent2,0.55));
+    ctx.font = F(160)+'px Georgia, serif';
+    ctx.fillStyle = quoteGrad;
+    ctx.fillText('\u201C', V(82), V(660));
+    ctx.restore();
+
+    let cursor = V(640);
+    const qBottomLimit = H - V(70) - V(94) - V(16); // isim + unvan + boşluklar için pay bırak
+    const qFit = fitTextBlock(document.getElementById('q_text').value, {
+      maxFontPx:F(46), minRatio:0.55, maxWidth:W-180, lineHeightRatio:58/46, maxLines:7, maxHeight:Math.max(qBottomLimit-cursor, V(50)),
+      weight:'700'
+    });
+    ctx.font = qFit.font;
+    ctx.fillStyle = '#ffffff';
+    cursor = drawLines(qFit.lines, V(90), cursor, qFit.lineHeight) + V(40);
+
+    // gradyanlı, yuvarlak köşeli aksan çubuğu — düz dikdörtgenden daha premium
+    const dividerGrad = ctx.createLinearGradient(V(90),0,V(180),0);
+    dividerGrad.addColorStop(0, theme.accent);
+    dividerGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = dividerGrad;
+    roundRect(V(90), cursor-V(32), V(90), Math.max(3,V(6)), V(3)); ctx.fill();
+    cursor += V(16);
+
+    // isimden önce küçük bir aksan noktası — imza/onay hissi
+    ctx.beginPath();
+    ctx.arc(V(96), cursor+V(14), V(5), 0, Math.PI*2);
+    ctx.fillStyle = theme.accent2;
+    ctx.fill();
+
+    const nameFit = fitSingleLine(document.getElementById('q_name').value.toUpperCase(), {maxFontPx:F(32), minRatio:0.6, maxWidth:W-210, family:"'Bebas Neue'", weight:'700'});
+    ctx.font = nameFit.font;
+    ctx.fillStyle = '#fff';
+    ctx.fillText(document.getElementById('q_name').value.toUpperCase(), V(118), cursor+V(20));
+    cursor += V(44);
+
+    const titleFitQ = fitSingleLine(document.getElementById('q_title').value.toUpperCase(), {maxFontPx:F(22), minRatio:0.6, maxWidth:W-210, family:'Montserrat', weight:'600'});
+    ctx.font = titleFitQ.font;
+    ctx.fillStyle = '#c9c5bb';
+    ctx.fillText(document.getElementById('q_title').value.toUpperCase(), V(118), cursor+V(10));
+
+    bottomBar(theme, state.website, '❝ ' + state.brand, H-V(70));
+  }
+
+  // ---------- TEMPLATE: EVENT ----------
+  function drawEvent(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    const imgH = H - V(520);
+    if (state.heroImg){
+      drawFit(state.heroImg, 0, 0, W, imgH);
+    } else {
+      placeholderFill(0,0,W,imgH,theme,'Etkinlik görselini yükleyin');
+    }
+    // görselden zemine daha kademeli, yumuşak geçiş
+    let g = ctx.createLinearGradient(0, imgH-V(280), 0, imgH);
+    g.addColorStop(0,'rgba(0,0,0,0)');
+    g.addColorStop(0.55, hexA(theme.bg,0.5));
+    g.addColorStop(1, theme.bg);
+    ctx.fillStyle = g; ctx.fillRect(0, imgH-V(280), W, V(280));
+    // logo/köşe okunurluğu için üstte hafif koyulaşma
+    g = ctx.createLinearGradient(0,0,0,V(200));
+    g.addColorStop(0,'rgba(0,0,0,0.45)'); g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fillRect(0,0,W,V(200));
+
+    // tarih kutusu: gradyanlı dolgu + yumuşak gölge + ince parlak çerçeve
+    const dbW = V(150), dbH = V(150), dbX = V(90), dbY = imgH - dbH/2;
+    ctx.save();
+    ctx.shadowColor = hexA(theme.accent, 0.5);
+    ctx.shadowBlur = V(24);
+    ctx.shadowOffsetY = V(6);
+    const dbGrad = ctx.createLinearGradient(dbX,dbY,dbX+dbW,dbY+dbH);
+    dbGrad.addColorStop(0, shade(theme.accent, 12));
+    dbGrad.addColorStop(1, shade(theme.accent, -14));
+    ctx.fillStyle = dbGrad;
+    roundRect(dbX, dbY, dbW, dbH, V(16)); ctx.fill();
+    ctx.restore();
+    ctx.save();
+    roundRect(dbX, dbY, dbW, dbH, V(16));
+    ctx.lineWidth = V(1.5);
+    ctx.strokeStyle = hexA('#ffffff',0.2);
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillStyle = '#fff';
+    const dayFit = fitSingleLine(document.getElementById('ev_day').value, {maxFontPx:F(56), minRatio:0.5, maxWidth:dbW-V(24), family:"'Bebas Neue'", weight:'700'});
+    ctx.font = dayFit.font;
+    ctx.fillText(document.getElementById('ev_day').value, dbX+dbW/2, dbY+dbH/2-V(14));
+    // ay adının altında kısa bir ayraç çizgisi — takvim yaprağı hissi
+    ctx.fillStyle = hexA('#ffffff',0.5);
+    ctx.fillRect(dbX+dbW/2-V(22), dbY+dbH/2+V(4), V(44), Math.max(1,V(1.5)));
+    ctx.fillStyle = '#fff';
+    const monthFit = fitSingleLine(document.getElementById('ev_month').value.toUpperCase(), {maxFontPx:F(20), minRatio:0.55, maxWidth:dbW-V(20), family:'Montserrat', weight:'700'});
+    ctx.font = monthFit.font;
+    ctx.fillText(document.getElementById('ev_month').value.toUpperCase(), dbX+dbW/2, dbY+dbH/2+V(34));
+    ctx.textAlign='left'; ctx.textBaseline='alphabetic';
+
+    drawLogo(W-V(120), V(120), V(48), theme);
+
+    // rozet: küçük gradyanlı pilli, düz metinden daha belirgin/şık
+    const badgeTextEv = document.getElementById('ev_badge').value.toUpperCase();
+    const badgeMaxW = W-(dbX+dbW+V(24))-V(90)-V(30);
+    const badgeFitEv = fitSingleLine(badgeTextEv, {maxFontPx:F(19), minRatio:0.6, maxWidth:badgeMaxW, family:'Montserrat', weight:'700'});
+    ctx.font = badgeFitEv.font;
+    const evBadgeW = ctx.measureText(badgeTextEv).width + V(30);
+    const evBadgeH = V(38), evBadgeX = dbX+dbW+V(24), evBadgeY = imgH+V(6);
+    const evBadgeGrad = ctx.createLinearGradient(evBadgeX,evBadgeY,evBadgeX+evBadgeW,evBadgeY);
+    evBadgeGrad.addColorStop(0, hexA(theme.accent2,0.22));
+    evBadgeGrad.addColorStop(1, hexA(theme.accent2,0.08));
+    ctx.fillStyle = evBadgeGrad;
+    roundRect(evBadgeX, evBadgeY, evBadgeW, evBadgeH, evBadgeH/2); ctx.fill();
+    ctx.fillStyle = theme.accent2;
+    ctx.textBaseline='middle';
+    ctx.fillText(badgeTextEv, evBadgeX+V(15), evBadgeY+evBadgeH/2+1);
+    ctx.textBaseline='alphabetic';
+
+    let cursor = imgH + V(70) + V(46);
+    const bottomLimitEv = H - V(70) - V(20);
+    const roughBudgetEv = bottomLimitEv - cursor;
+    const titleFitEv = fitMultiBlock(
+      [document.getElementById('ev_title1').value.toUpperCase(), document.getElementById('ev_title2').value.toUpperCase()],
+      { maxFontPx:F(58), minRatio:0.5, maxWidth:W-V(180), lineHeightRatio:62/58, maxLines:5, maxHeight: roughBudgetEv*0.4 }
+    );
+    ctx.font = titleFitEv.font;
+    ctx.fillStyle = theme.text;
+    cursor = drawLines(titleFitEv.linesArr[0], dbX+dbW+V(24), cursor, titleFitEv.lineHeight) + 2;
+    ctx.fillStyle = theme.accent2;
+    cursor = drawLines(titleFitEv.linesArr[1], dbX+dbW+V(24), cursor, titleFitEv.lineHeight);
+
+    cursor = Math.max(cursor, dbY+dbH) + V(38);
+
+    // başlık ile açıklama arasında ince ayraç çizgisi
+    ctx.fillStyle = hexA(theme.accent2, 0.35);
+    ctx.fillRect(V(90), cursor-V(20), W-V(180), Math.max(1,V(1.5)));
+
+    const descFitEv = fitTextBlock(document.getElementById('ev_desc').value, {
+      maxFontPx:F(26), minRatio:0.6, maxWidth:W-V(180), lineHeightRatio:34/26, maxLines:6, maxHeight:Math.max(bottomLimitEv-cursor-V(86), V(30)), paragraphs:true
+    });
+    ctx.font = descFitEv.font;
+    ctx.fillStyle = theme.sub;
+    cursor = drawLines(descFitEv.lines, V(90), cursor, descFitEv.lineHeight) + V(30);
+
+    // detail pills (saat / konum) — gradyanlı, ince kenarlıklı, yumuşak gölgeli
+    const pillY = cursor;
+    const pillH = V(56);
+    const timeTxt = '🕒  ' + document.getElementById('ev_time').value;
+    const locTxt = '📍  ' + document.getElementById('ev_location').value;
+    let pillFontPx = F(22);
+    const availPillW = W - V(90) - V(90);
+    let pw1, pw2;
+    while(true){
+      ctx.font = '700 '+pillFontPx+'px Montserrat';
+      pw1 = ctx.measureText(timeTxt).width + V(40);
+      pw2 = ctx.measureText(locTxt).width + V(40);
+      if (pw1+V(16)+pw2 <= availPillW || pillFontPx <= F(22)*0.55) break;
+      pillFontPx -= shrinkStep(pillFontPx);
+    }
+    ctx.font = '700 '+pillFontPx+'px Montserrat';
+    [[V(90), pw1],[V(90)+pw1+V(16), pw2]].forEach(([px,pw])=>{
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.18)';
+      ctx.shadowBlur = V(10);
+      ctx.shadowOffsetY = V(3);
+      ctx.fillStyle = theme.dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.055)';
+      roundRect(px, pillY, pw, pillH, pillH/2); ctx.fill();
+      ctx.restore();
+      ctx.save();
+      roundRect(px, pillY, pw, pillH, pillH/2);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = hexA(theme.accent2, 0.3);
+      ctx.stroke();
+      ctx.restore();
+    });
+    ctx.fillStyle = theme.text;
+    ctx.textBaseline='middle';
+    ctx.fillText(timeTxt, V(90)+V(20), pillY+pillH/2+2);
+    ctx.fillText(locTxt, V(90)+pw1+V(36), pillY+pillH/2+2);
+    ctx.textBaseline='alphabetic';
+
+    bottomBar(theme, state.brand, state.website, H-V(70));
+  }
+
+  // ---------- TEMPLATE: STAT ----------
+  function drawStat(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    if (state.heroImg){
+      drawFit(state.heroImg, 0,0,W,H);
+      ctx.fillStyle = theme.dark ? 'rgba(0,0,0,0.62)' : 'rgba(255,255,255,0.72)';
+      ctx.fillRect(0,0,W,H);
+    }
+    // merkeze odaklanan yumuşak vinyet — arka plan olsun olmasın hafif derinlik katar
+    const statVin = ctx.createRadialGradient(W/2,H*0.42,Math.min(W,H)*0.2,W/2,H*0.42,Math.max(W,H)*0.75);
+    statVin.addColorStop(0,'rgba(0,0,0,0)');
+    statVin.addColorStop(1, theme.dark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)');
+    ctx.fillStyle = statVin; ctx.fillRect(0,0,W,H);
+
+    drawLogo(W/2, V(140), V(52), theme);
+
+    let cursor = V(280);
+    ctx.textAlign = 'center';
+    const statsBlockCeiling = H - V(310); // istatistik satırı + alt bilgi + alt çubuk için pay
+    const availTDs = statsBlockCeiling - cursor;
+
+    const titleFitS2 = fitMultiBlock(
+      [document.getElementById('s_title1').value.toUpperCase(), document.getElementById('s_title2').value.toUpperCase()],
+      { maxFontPx:F(54), minRatio:0.55, maxWidth:W-160, lineHeightRatio:58/54, maxLines:4, maxHeight: availTDs*0.55 }
+    );
+    ctx.font = titleFitS2.font;
+    ctx.fillStyle = theme.text;
+    cursor = drawLines(titleFitS2.linesArr[0], W/2, cursor, titleFitS2.lineHeight, 'center') + 2;
+    ctx.fillStyle = theme.accent2;
+    cursor = drawLines(titleFitS2.linesArr[1], W/2, cursor, titleFitS2.lineHeight, 'center') + V(28);
+
+    const descFitS = fitTextBlock(document.getElementById('s_desc').value, {
+      maxFontPx:F(24), minRatio:0.6, maxWidth:W-260, lineHeightRatio:32/24, maxLines:5, maxHeight:Math.max(statsBlockCeiling-cursor-V(100), V(30)), paragraphs:true
+    });
+    ctx.font = descFitS.font;
+    ctx.fillStyle = theme.sub;
+    cursor = drawLines(descFitS.lines, W/2, cursor, descFitS.lineHeight, 'center') + V(50);
+
+    // gradyanlı, yuvarlak köşeli ayraç çubuğu
+    const statDivGrad = ctx.createLinearGradient(W/2-V(35),0,W/2+V(35),0);
+    statDivGrad.addColorStop(0, theme.accent); statDivGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = statDivGrad;
+    roundRect(W/2-V(35), cursor-V(28), V(70), Math.max(3,V(5)), V(2)); ctx.fill();
+    cursor += V(50);
+
+    const stats = [
+      [document.getElementById('s1_num').value, document.getElementById('s1_label').value],
+      [document.getElementById('s2_num').value, document.getElementById('s2_label').value],
+      [document.getElementById('s3_num').value, document.getElementById('s3_label').value],
+    ];
+    const colW = W/3;
+    stats.forEach(([num,label],i)=>{
+      const cx = colW*i + colW/2;
+      const numFit = fitSingleLine(num, {maxFontPx:F(72), minRatio:0.45, maxWidth:colW-40, family:"'Bebas Neue'", weight:'700'});
+      ctx.font = numFit.font;
+      // rakamın arkasında yumuşak bir parlama — vitrin/ödül panosu hissi
+      ctx.save();
+      ctx.shadowColor = hexA(theme.accent2, 0.6);
+      ctx.shadowBlur = V(26);
+      ctx.fillStyle = theme.accent2;
+      ctx.fillText(num, cx, cursor+V(60));
+      ctx.restore();
+      const ll = fitTextBlock(label.toUpperCase(), {maxFontPx:F(17), minRatio:0.7, maxWidth:colW-40, lineHeightRatio:22/17, maxLines:2, maxHeight:V(50), family:'Montserrat', weight:'700'});
+      ctx.font = ll.font;
+      ctx.fillStyle = theme.sub;
+      drawLines(ll.lines, cx, cursor+V(100), ll.lineHeight, 'center');
+      if (i<2){
+        const sepGrad = ctx.createLinearGradient(0,cursor,0,cursor+V(140));
+        sepGrad.addColorStop(0, 'rgba(0,0,0,0)');
+        sepGrad.addColorStop(0.5, hexA(theme.accent2, 0.4));
+        sepGrad.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.strokeStyle = sepGrad;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(colW*(i+1), cursor); ctx.lineTo(colW*(i+1), cursor+V(140)); ctx.stroke();
+      }
+    });
+    ctx.textAlign = 'left';
+
+    footerCentered(theme, document.getElementById('s_tag').value.toUpperCase(), H-V(150));
+    bottomBar(theme, state.brand, state.website, H-V(70));
+  }
+
+  // ---------- TEMPLATE: MINIMAL ----------
+  function drawMinimal(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    if (state.heroImg){
+      drawFit(state.heroImg, 0,0,W,H);
+      ctx.fillStyle = hexA(theme.bg, theme.dark ? 0.82 : 0.86);
+      ctx.fillRect(0,0,W,H);
+    }
+    // merkeze odaklanan çok hafif vinyet — butik/zarif bir derinlik
+    const minVin = ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.22,W/2,H/2,Math.max(W,H)*0.75);
+    minVin.addColorStop(0,'rgba(0,0,0,0)');
+    minVin.addColorStop(1, theme.dark ? 'rgba(0,0,0,0.28)' : 'rgba(0,0,0,0.07)');
+    ctx.fillStyle = minVin; ctx.fillRect(0,0,W,H);
+
+    // decorative frame: ince dış çerçeve + gölgeli aksan köşeler
+    const m = V(60);
+    ctx.strokeStyle = hexA(theme.accent2, 0.5);
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(m,m,W-2*m,H-2*m);
+    const cl = V(34);
+    [[m,m,1,1],[W-m,m,-1,1],[m,H-m,1,-1],[W-m,H-m,-1,-1]].forEach(([x,y,dx,dy])=>{
+      ctx.save();
+      ctx.shadowColor = hexA(theme.accent, 0.4);
+      ctx.shadowBlur = V(10);
+      ctx.strokeStyle = theme.accent;
+      ctx.lineWidth = V(4);
+      ctx.beginPath(); ctx.moveTo(x, y+cl*dy); ctx.lineTo(x,y); ctx.lineTo(x+cl*dx, y); ctx.stroke();
+      ctx.restore();
+    });
+
+    drawLogo(W/2, V(190), V(50), theme);
+
+    ctx.textAlign = 'center';
+    const eyebrowJoined = document.getElementById('m_eyebrow').value.toUpperCase().split('').join('\u200a');
+    const eyebrowFit = fitSingleLine(eyebrowJoined, {maxFontPx:F(20), minRatio:0.65, maxWidth:W-340, family:'Montserrat', weight:'700'});
+    ctx.font = eyebrowFit.font;
+    const eyebrowW = ctx.measureText(eyebrowJoined).width;
+    ctx.fillStyle = theme.accent2;
+    ctx.fillText(eyebrowJoined, W/2, V(300));
+    // eyebrow'un iki yanında küçük aksan çizgileri — sakin, butik bir simetri
+    ctx.fillRect(W/2 - eyebrowW/2 - V(46), V(297), V(26), Math.max(1,V(1.5)));
+    ctx.fillRect(W/2 + eyebrowW/2 + V(20), V(297), V(26), Math.max(1,V(1.5)));
+
+    let cursor = V(400);
+    const ceilingYm = H - V(190); // altbilgi/footer için üstte bırakılacak pay
+    const availTDm = ceilingYm - cursor;
+    const titleFitM = fitMultiBlock(
+      [document.getElementById('m_title1').value.toUpperCase(), document.getElementById('m_title2').value.toUpperCase()],
+      { maxFontPx:F(78), minRatio:0.5, maxWidth:W-220, lineHeightRatio:84/78, maxLines:4, maxHeight: availTDm*0.62 }
+    );
+    ctx.font = titleFitM.font;
+    ctx.fillStyle = theme.text;
+    cursor = drawLines(titleFitM.linesArr[0], W/2, cursor, titleFitM.lineHeight, 'center') + 4;
+    ctx.fillStyle = theme.accent;
+    cursor = drawLines(titleFitM.linesArr[1], W/2, cursor, titleFitM.lineHeight, 'center') + V(40);
+
+    const minDivGrad = ctx.createLinearGradient(W/2-V(45),0,W/2+V(45),0);
+    minDivGrad.addColorStop(0, theme.accent); minDivGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = minDivGrad;
+    roundRect(W/2-V(45), cursor-V(30), V(90), Math.max(3,V(5)), V(2)); ctx.fill();
+    cursor += V(40);
+
+    const descFitM = fitTextBlock(document.getElementById('m_desc').value, {
+      maxFontPx:F(26), minRatio:0.6, maxWidth:W-320, lineHeightRatio:36/26, maxLines:6, maxHeight:Math.max(ceilingYm-cursor, V(30)), paragraphs:true
+    });
+    ctx.font = descFitM.font;
+    ctx.fillStyle = theme.sub;
+    drawLines(descFitM.lines, W/2, cursor, descFitM.lineHeight, 'center');
+    ctx.textAlign = 'left';
+
+    footerCentered(theme, document.getElementById('m_footer').value.toUpperCase(), H-V(110));
+    ctx.textAlign = 'center';
+    const webFitM = fitSingleLine(state.website, {maxFontPx:F(16), minRatio:0.6, maxWidth:W-260, family:'Montserrat', weight:'700'});
+    ctx.font = webFitM.font;
+    ctx.fillStyle = theme.sub;
+    ctx.fillText(state.website, W/2, H-V(70));
+    ctx.textAlign = 'left';
+  }
+
+  // ---------- TEMPLATE: 2. GÖRSEL / DETAYLAR SAYFASI ----------
+  function drawDetailSlide(theme){
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0,0,W,H);
+
+    // hafif vinyet — diğer şablonlarla tutarlı, sakin bir derinlik
+    const dVin = ctx.createRadialGradient(W/2,H*0.4,Math.min(W,H)*0.25,W/2,H*0.4,Math.max(W,H)*0.8);
+    dVin.addColorStop(0,'rgba(0,0,0,0)');
+    dVin.addColorStop(1, theme.dark ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.05)');
+    ctx.fillStyle = dVin; ctx.fillRect(0,0,W,H);
+
+    // üstte ince gradyanlı aksan şeridi
+    let g = ctx.createLinearGradient(0,0,W,0);
+    g.addColorStop(0, theme.accent);
+    g.addColorStop(1, theme.accent2);
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,V(10));
+
+    drawLogo(V(140),V(150),V(50),theme);
+
+    drawPageLabel(theme, '2 / 2');
+
+    const bodyLeft = V(110);
+    const bodyWidth = Math.min(W - bodyLeft - V(150), W*0.76);
+    const bottomLimit = H - V(70) - V(30);
+
+    // kicker: logonun ALTINDA, ayrı bir satırda — artık logoyla çakışmıyor
+    const kickerY = V(250);
+    const kicker = 'HABERİN DETAYLARI';
+    ctx.font = '700 '+F(22)+'px Montserrat';
+    ctx.fillStyle = theme.accent2;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(kicker, bodyLeft, kickerY);
+    ctx.textBaseline = 'alphabetic';
+    const kw = ctx.measureText(kicker).width;
+    const kGrad = ctx.createLinearGradient(bodyLeft,0,bodyLeft+Math.min(kw,V(260)),0);
+    kGrad.addColorStop(0, theme.accent); kGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = kGrad;
+    ctx.fillRect(bodyLeft, kickerY+V(18), Math.min(kw, V(260)), V(3));
+
+    // metni bir "giriş cümlesi" (lede) + "gövde" olarak ikiye ayırıyoruz: düz, tek biçimli
+    // bir metin bloğu yerine görsel hiyerarşi kurarak okuyucunun dikkatini ilk anda
+    // yakalamayı hedefler — gerçek haber uygulamalarındaki "öne çıkan cümle" tekniği.
+    const raw = detailTextEl.value.trim();
+    const bodyTextFull = raw || 'Bu haberin detayları burada yer alacak. "Yapay Zeka ile Oluştur" ya da "Linkten Gönderi Oluştur" özelliğini kullandığınızda bu alan otomatik dolar; dilerseniz elle de düzenleyebilirsiniz.';
+    const { lede, rest } = splitLede(bodyTextFull);
+
+    let cursor = kickerY + V(58);
+    const blockTop = cursor;
+
+    // vurgulu giriş cümlesi: daha büyük, daha kalın, göz alıcı
+    const ledeFit = fitTextBlock(lede, {
+      maxFontPx:F(40), minRatio:0.6, maxWidth:bodyWidth, lineHeightRatio:1.3, maxLines:4,
+      maxHeight:(bottomLimit-cursor)*0.4, family:'Montserrat', weight:'800'
+    });
+    ctx.font = ledeFit.font;
+    ctx.fillStyle = theme.text;
+    cursor = drawLines(ledeFit.lines, bodyLeft, cursor + ledeFit.fontPx*0.85, ledeFit.lineHeight);
+
+    let restFit = null;
+    if (rest){
+      cursor += V(32);
+      // ince kısa ayraç: giriş cümlesini gövdeden ayırır
+      ctx.beginPath();
+      ctx.moveTo(bodyLeft, cursor - V(16));
+      ctx.lineTo(bodyLeft + Math.min(V(120), bodyWidth*0.25), cursor - V(16));
+      ctx.strokeStyle = hexA(theme.accent2, 0.45);
+      ctx.lineWidth = V(2.5);
+      ctx.stroke();
+
+      // gövde: metnin geri kalanı — okunabilirlik için daha küçük/normal stil, tamamı görünür
+      restFit = fitTextBlock(rest, {
+        maxFontPx:F(29), minRatio:0.46, maxWidth:bodyWidth, lineHeightRatio:1.56, maxLines:24,
+        maxHeight:Math.max(bottomLimit-cursor, V(30)), family:'Montserrat', weight:'500', paragraphs:true
+      });
+      ctx.font = restFit.font;
+      ctx.fillStyle = theme.dark ? '#dedad0' : '#333b44';
+      cursor = drawLines(restFit.lines, bodyLeft, cursor + restFit.fontPx*0.85, restFit.lineHeight);
+    }
+
+    // metnin solunda, tüm blok (giriş cümlesi + gövde) boyunca uzanan tek bir aksan çubuğu
+    const barTop = blockTop - V(6);
+    const barBottom = cursor + V(4);
+    const barGrad = ctx.createLinearGradient(0, barTop, 0, barBottom);
+    barGrad.addColorStop(0, theme.accent);
+    barGrad.addColorStop(1, theme.accent2);
+    ctx.fillStyle = barGrad;
+    roundRect(bodyLeft-V(30), barTop, V(6), Math.max(barBottom-barTop, V(10)), V(3));
+    ctx.fill();
+
+    bottomBar(theme, '📅 ' + bugununTarihi(), state.website, H-V(70));
+  }
+
+  // ---------- RENDER DISPATCH ----------
+  function render(){
+    const theme = THEMES[state.themeIdx];
+    if (state.secondSlide && state.activeSlide === 2 && secondSlideSupported()){
+      drawDetailSlide(theme);
+      return;
+    }
+    if (state.template === 'breaking') drawBreaking(theme);
+    else if (state.template === 'project') drawProject(theme);
+    else if (state.template === 'quote') drawQuote(theme);
+    else if (state.template === 'event') drawEvent(theme);
+    else if (state.template === 'stat') drawStat(theme);
+    else drawMinimal(theme);
+
+    // 2. sayfa (detaylar) aktifse, 1. sayfada da bunun bir carousel'in ilk parçası olduğunu belirten "1/2" etiketi göster
+    if (state.secondSlide && secondSlideSupported()){
+      drawPageLabel(theme, '1 / 2');
+    }
+  }
+
+  // ---------- RESPONSIVE CANVAS FIT ----------
+  function fitCanvas(){
+    const stage = document.querySelector('.stage');
+    const availW = stage.clientWidth - 80;
+    const availH = stage.clientHeight - 80;
+    const ratio = W/H;
+    let dw = availW, dh = dw/ratio;
+    if (dh > availH){ dh = availH; dw = dh*ratio; }
+    canvas.style.width = Math.max(160,dw)+'px';
+    canvas.style.height = Math.max(160,dh)+'px';
+  }
+  window.addEventListener('resize', fitCanvas);
+
+  // ---------- AI CAPTION & HASHTAG (Groq — ücretsiz ve hızlı açık kaynak modeller) ----------
+  // 1) console.groq.com/keys adresinden ücretsiz bir API key alın (kredi kartı istemez, saniyeler sürer).
+  // 2) Aşağıya yapıştırın. Not: Groq key'leri Google Cloud key'leri gibi belirli bir domain'e
+  //    (HTTP referrer) kilitlenemez; bu dosyayı herkese açık bir sitede yayınlayacaksanız isteği
+  //    kendi sunucunuzdan geçiren basit bir proxy kullanmak anahtarınızın tarayıcıda açıkta
+  //    kalmasını önler.
+  const GROQ_API_KEY = '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';
+  // Düz metin görevlerinde (açıklama/hashtag üretimi ve haber metni analizi) kullanılan model.
+  // openai/gpt-oss-120b kaliteli ve hâlâ ücretsiz kotada; daha küçük/hızlı bir sonuç isterseniz
+  // burayı 'openai/gpt-oss-20b' olarak değiştirebilirsiniz.
+  const GROQ_MODEL = 'openai/gpt-oss-120b';
+  // Haber linkini KENDİSİ doğrudan ziyaret edip okuyabilen ajan sistemi — Gemini'deki
+  // "url_context" aracının Groq'taki dengi (bkz. Groq'un "Visit Website" built-in tool'u).
+  // Daha düşük gecikme isterseniz 'groq/compound-mini' de denenebilir.
+  const GROQ_COMPOUND_MODEL = 'groq/compound';
+  // Kopyala-yapıştır sırasında araya giren tırnak, boşluk veya satır sonu karakterlerini
+  // otomatik temizler — "geçersiz kimlik bilgisi" hatalarının en sık nedeni budur.
+  const GROQ_KEY_CLEAN = String(GROQ_API_KEY || '').trim().replace(/^["'`]+|["'`]+$/g, '');
+
+  // Groq'un OpenAI-uyumlu chat completions endpoint'ine tek noktadan istek atan ortak yardımcı.
+  async function callGroq(payload){
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY_CLEAN },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    if (!response.ok){
+      const err = new Error((data.error && data.error.message) || ('Groq API hatası (HTTP ' + response.status + ')'));
+      err.status = response.status;
+      throw err;
+    }
+    return data;
+  }
+
+  const aiBtn = document.getElementById('aiGenBtn');
+  const aiResult = document.getElementById('aiResult');
+  const aiCaptionEl = document.getElementById('aiCaption');
+  const aiHashtagsEl = document.getElementById('aiHashtags');
+  const aiStatusEl = document.getElementById('aiStatus');
+  const aiCopyBtn = document.getElementById('aiCopyBtn');
+
+  const TPL_LABELS = {
+    breaking:'Son Dakika Haberi', project:'Proje / Hizmet Tanıtımı', quote:'Söz / Açıklama',
+    event:'Etkinlik Davetiyesi', stat:'Başarı / İstatistik Özeti', minimal:'Minimal Duyuru'
+  };
+
+  function collectAiContext(){
+    const val = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    const t = state.template;
+    let title = '', desc = '', extra = '';
+    if (t === 'breaking'){
+      title = [val('b_title1'), val('b_title2')].filter(Boolean).join(' ');
+      desc = val('b_desc'); extra = 'Rozet: ' + val('b_badge') + ', Tarih: ' + val('b_date');
+    } else if (t === 'project'){
+      title = [val('p_title1'), val('p_title2')].filter(Boolean).join(' ');
+      desc = val('p_desc'); extra = 'Slogan: ' + val('p_tag');
+    } else if (t === 'quote'){
+      title = val('q_text');
+      desc = val('q_name') + ' — ' + val('q_title');
+    } else if (t === 'event'){
+      title = [val('ev_title1'), val('ev_title2')].filter(Boolean).join(' ');
+      desc = val('ev_desc');
+      extra = 'Tarih: ' + val('ev_day') + ' ' + val('ev_month') + ', Saat: ' + val('ev_time') + ', Yer: ' + val('ev_location');
+    } else if (t === 'stat'){
+      title = [val('s_title1'), val('s_title2')].filter(Boolean).join(' ');
+      desc = val('s_desc');
+      extra = 'Rakamlar: ' + val('s1_num') + ' ' + val('s1_label') + ', ' + val('s2_num') + ' ' + val('s2_label') + ', ' + val('s3_num') + ' ' + val('s3_label') + '. Slogan: ' + val('s_tag');
+    } else {
+      title = [val('m_title1'), val('m_title2')].filter(Boolean).join(' ');
+      desc = val('m_desc'); extra = val('m_eyebrow') + ' / ' + val('m_footer');
+    }
+    return { templateLabel: TPL_LABELS[t] || t, title, desc, extra, brand: state.brand, website: state.website };
+  }
+
+  function setAiStatus(msg, isError){
+    aiStatusEl.textContent = msg || '';
+    aiStatusEl.classList.toggle('error', !!isError);
+  }
+
+  async function generateCaption(){
+    if (!GROQ_KEY_CLEAN || GROQ_KEY_CLEAN.indexOf('BURAYA_') === 0){
+      setAiStatus('Önce index.html içine kendi ücretsiz Groq API keyinizi yapıştırın.', true);
+      return;
+    }
+
+    const c = collectAiContext();
+    aiBtn.disabled = true;
+    aiBtn.textContent = '✨ Oluşturuluyor...';
+    setAiStatus('');
+    aiResult.style.display = 'none';
+
+    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya editörüsün(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışanısın). Aşağıdaki Instagram gönderisi için '
+      + 'doğal, ilgi çekici, akıcı bir Türkçe gönderi açıklaması (caption) ve konuyla ilgili güçlü bir hashtag seti üret.\n\n'
+      + 'Şablon türü: ' + c.templateLabel + '\n'
+      + 'Başlık: ' + c.title + '\n'
+      + 'Açıklama / detay: ' + c.desc + '\n'
+      + 'Ek bilgi: ' + c.extra + '\n'
+      + 'Marka / hesap: ' + c.brand + '\n'
+      + 'Web sitesi: ' + c.website + '\n\n'
+      + 'CAPTION YAPISI (bu sırayla, satır aralarında boşluk bırak):\n'
+      + '1) HOOK: İlk cümle, kaydırmayı durduracak dikkat çekici/merak uyandırıcı bir açılış olsun (soru, çarpıcı ifade ya da güçlü bir iddia).\n'
+      + '2) GÖVDE: 3-5 kısa satır/paragrafta haberin özünü, önemini ve okuyucuya faydasını doğal bir dille anlat; gerekirse ölçülü emoji kullan, abartma.\n'
+      + '3) CTA: Son satırda okuyucuyu harekete geçiren net bir çağrı olsun (yorum yapmaya, paylaşmaya, kaydetmeye ya da profildeki linke yönlendirmeye teşvik et).\n'
+      + '4) KAYNAK: En altta, ayrı bir satırda "Kaynak: ' + (c.website || c.brand) + '" yaz (başka hiçbir ek bilgi ekleme).\n\n'
+      + 'HASHTAG KURALLARI:\n'
+      + '- Konuyla doğrudan ilgili 5 adet Türkçe hashtag üret.\n'
+      + '- Karışım şu şekilde olsun: 1 tanesi geniş/genel gündem etiketi, 3 tanesi haberin konusuna özel etiket, 0 tanesi marka/hesapla ilgili etiket, 1 tanesi güncel/trend tarzı etiket.\n'
+      + '- Hepsi # ile başlasın, boşluksuz, birbirinin tekrarı olmasın, çok genel/anlamsız etiketlerden (#post gibi) kaçın.\n\n'
+      + 'DETAY METNİ (2. görsel/detay sayfası için):\n'
+      + '- Haberin en can alıcı 2-3 ayrıntısını (ör. önemli bir gelişme, bir rakam/veri ya da bir açıklama) kısa ve öz şekilde veren bir Türkçe metin üret; 220-320 karakter uzunluğunda, TEK paragraf olsun, uzun/dolgu cümlelerden kaçın.\n'
+      + '- Görseldeki başlık/açıklamayı tekrar etme, onu tamamlayan öz bir ek bilgi sun.\n\n'
+      + '- SADECE aşağıdaki JSON formatında yanıt ver. Başka hiçbir metin, açıklama veya kod bloğu ekleme:\n'
+      + '{"caption": "...", "hashtags": ["#etiket1","#etiket2"], "detailText": "..."}';
+
+    try{
+      const data = await callGroq({
+        model: GROQ_MODEL,
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' },
+        temperature: 0.9
+      });
+      const text = (((data.choices||[])[0]||{}).message && data.choices[0].message.content) || '';
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+
+      aiCaptionEl.value = parsed.caption || '';
+      aiHashtagsEl.value = Array.isArray(parsed.hashtags) ? parsed.hashtags.join(' ') : (parsed.hashtags || '');
+      if (parsed.detailText) { detailTextEl.value = parsed.detailText; render(); }
+      aiResult.style.display = 'block';
+      setAiStatus('');
+    } catch(err){
+      console.error('AI caption hatası:', err);
+      let msg;
+      if (err.status === 429){
+        msg = 'Ücretsiz kota anlık limitine ulaşıldı, biraz sonra tekrar deneyin.';
+      } else if (err.status === 401){
+        msg = 'API key kabul edilmedi. index.html içindeki GROQ_API_KEY değerinin console.groq.com/keys sayfasındaki anahtarla birebir aynı (fazladan tırnak/boşluk olmadan) olduğundan emin olun.';
+      } else {
+        msg = 'Bir şeyler ters gitti: ' + err.message;
+      }
+      setAiStatus(msg, true);
+    } finally {
+      aiBtn.disabled = false;
+      aiBtn.textContent = '✨ Yapay Zeka ile Oluştur';
+    }
+  }
+  aiBtn.addEventListener('click', generateCaption);
+
+  // Açıklama + hashtag metnini panoya kopyalar. Hem bu tekil butona hem de
+  // aşağıdaki "Full Export" butonuna ortak hizmet verir (Promise döndürür).
+  function copyDescriptionAndHashtags(){
+    const full = aiCaptionEl.value + '\n\n' + aiHashtagsEl.value;
+    return navigator.clipboard.writeText(full).then(()=>{
+      const original = aiCopyBtn.textContent;
+      aiCopyBtn.textContent = '✅ Kopyalandı';
+      setTimeout(()=> aiCopyBtn.textContent = original, 1500);
+    });
+  }
+
+  aiCopyBtn.addEventListener('click', ()=>{
+    copyDescriptionAndHashtags().catch(()=> setAiStatus('Kopyalama başarısız oldu.', true));
+  });
+
+  // ---------- FORMAT TOGGLE (PNG / JPG) ----------
+  let exportFormat = 'png';
+  document.querySelectorAll('.format-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.format-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      exportFormat = btn.dataset.fmt;
+    });
+  });
+
+  // ---------- NEWS URL -> AUTO POST (template + image + text) ----------
+  const TEMPLATE_FIELD_SCHEMA = {
+    breaking: ['b_badge','b_title1','b_title2','b_desc','b_date'],
+    project:  ['p_title1','p_title2','p_desc','p_f1i','p_f1t','p_f1d','p_f2i','p_f2t','p_f2d','p_f3i','p_f3t','p_f3d','p_tag'],
+    quote:    ['q_text','q_name','q_title'],
+    event:    ['ev_badge','ev_day','ev_month','ev_title1','ev_title2','ev_desc','ev_time','ev_location'],
+    stat:     ['s_title1','s_title2','s_desc','s1_num','s1_label','s2_num','s2_label','s3_num','s3_label','s_tag'],
+    minimal:  ['m_eyebrow','m_title1','m_title2','m_desc','m_footer']
+  };
+
+  const newsUrlEl = document.getElementById('newsUrl');
+  const newsGenBtn = document.getElementById('newsGenBtn');
+  const newsStatusEl = document.getElementById('newsStatus');
+  const newsProgressEl = document.getElementById('newsProgress');
+
+  function setNewsStatus(msg, type){
+    newsStatusEl.textContent = msg || '';
+    newsStatusEl.classList.remove('error','ok');
+    if (type) newsStatusEl.classList.add(type);
+  }
+
+  function selectTemplateByKey(key){
+    const btn = document.querySelector('.tpl-btn[data-tpl="'+key+'"]');
+    if (btn) btn.click(); // reuses existing switch logic (updates state + visible field group)
+  }
+
+  function selectThemeByIdx(idx){
+    const swatches = document.querySelectorAll('.theme-swatch');
+    if (swatches[idx]) swatches[idx].click();
+  }
+
+  function fillTemplateFields(templateKey, fields){
+    const allowed = TEMPLATE_FIELD_SCHEMA[templateKey] || [];
+    allowed.forEach(id=>{
+      if (id === 'b_date') return; // tarih her zaman günün gerçek tarihi, sabit formatta kalır (saatsiz)
+      if (fields && Object.prototype.hasOwnProperty.call(fields, id)){
+        const el = document.getElementById(id);
+        if (el && fields[id] != null && String(fields[id]).trim() !== '') el.value = fields[id];
+      }
+    });
+  }
+
+  function loadImageFromUrl(url){
+    return new Promise(resolve=>{
+      if (!url){ resolve(null); return; }
+      const tryLoad = (src, onFail)=>{
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = ()=> resolve(img);
+        img.onerror = onFail;
+        img.src = src;
+      };
+      // 1) doğrudan dene, 2) CORS proxy (images.weserv.nl) ile dene, 3) vazgeç
+      tryLoad(url, ()=>{
+        const proxied = 'https://images.weserv.nl/?url=' + encodeURIComponent(url.replace(/^https?:\/\//,''));
+        tryLoad(proxied, ()=> resolve(null));
+      });
+    });
+  }
+
+  async function generateFromNewsUrl(){
+    const url = newsUrlEl.value.trim();
+    if (!url){ setNewsStatus('Lütfen bir haber linki girin.', 'error'); return; }
+    if (!/^https?:\/\//i.test(url)){ setNewsStatus('Geçerli bir http(s) linki girin.', 'error'); return; }
+    if (!GROQ_KEY_CLEAN || GROQ_KEY_CLEAN.indexOf('BURAYA_') === 0){
+      setNewsStatus('Önce index.html içine kendi ücretsiz Groq API keyinizi yapıştırın.', 'error');
+      return;
+    }
+
+    newsGenBtn.disabled = true;
+    newsGenBtn.textContent = '✨ Haber analiz ediliyor...';
+    newsProgressEl.classList.add('active');
+    setNewsStatus('Haber okunuyor ve gönderi hazırlanıyor, bu birkaç saniye sürebilir…');
+
+    const schemaHint = Object.entries(TEMPLATE_FIELD_SCHEMA)
+      .map(([k,fs])=> k + ': {' + fs.map(f=>'"'+f+'"').join(', ') + '}')
+      .join('\n');
+
+    const prompt = 'Sen deneyimli bir haber editörü ve sosyal medya tasarımcısısın(AK PARTİ ve RECEP TAYYİP ERDOĞAN taraftarı olan bir medya şirketi çalışansın). Sana verilen haber linkinin içeriğini oku ve bu habere uygun bir Instagram gönderisi için gereken tüm verileri üret.\n\n'
+      + 'ADIM 1 - Şablon seç (haberin türüne göre en uygun OLANI seç):\n'
+      + '- breaking: son dakika / güncel haber\n'
+      + '- project: proje, yatırım, hizmet tanıtımı\n'
+      + '- quote: bir kişinin sözü/açıklaması öne çıkıyorsa\n'
+      + '- event: etkinlik, davet, tören\n'
+      + '- stat: rakam/istatistik ağırlıklı haber\n'
+      + '- minimal: yukarılara uymayan genel duyuru\n\n'
+      + 'ADIM 2 - 0 ile 7 arasında bir renk teması index\'i seç (haberin tonuna göre): '
+      + '0 kızıl&altın=önemli/acil, 1 lacivert=kurumsal/resmi, 2 zümrüt=çevre/tarım/sağlık, 3 mor=teknoloji/inovasyon, '
+      + '4 turuncu=enerji/altyapı, 5 petrol=sanayi/üretim, 6 bordo=güvenlik/asayiş, 7 krem=kültür/sanat/zarif konular.\n\n'
+      + 'ADIM 3 - Sadece seçtiğin şablona ait alanları, aşağıdaki şemaya göre doldur (diğer şablonların alanlarını EKLEME):\n'
+      + schemaHint + '\n\n'
+      + 'ADIM 4 - Haberin öne çıkan görselinin Yüksek çözünürlüklü hali varsa, yüksek çözünürlüklü olan görselin adresini al (og:image gibi) tam URL\'sini bul; bulamazsan null yaz.\n\n'
+      + 'ADIM 5 - Instagram gönderi açıklaması (caption) ve hashtag seti üret. Caption şu sırayla kurgulanmalı (satır aralarında boşluk bırak):\n'
+      + '  1) HOOK: İlk cümle, kaydırmayı durduracak dikkat çekici/merak uyandırıcı bir açılış olsun (soru, çarpıcı ifade ya da güçlü bir iddia).\n'
+      + '  2) GÖVDE: 3-5 kısa satır/paragrafta haberin özünü doğal bir dille anlat; gerekirse ölçülü emoji kullan, abartma, uydurma bilgi ekleme.\n'
+      + '  3) CTA: Son satırda okuyucuyu harekete geçiren net bir çağrı olsun (yorum yapmaya, paylaşmaya, kaydetmeye ya da profildeki linke yönlendirmeye teşvik et).\n'
+      + '  4) KAYNAK: En altta, ayrı bir satırda "Kaynak: (haberin alındığı sitenin adı)" yaz (haberin kaynağı olan sitenin gerçek adını linkten/domainden çıkar).\n'
+      + '  Hashtagler için: konuyla doğrudan ilgili 5 adet Türkçe hashtag üret; 1 tanesi geniş/genel gündem etiketi, 3 tanesi haberin konusuna özel etiket, 0 tanesi marka/hesapla ilgili etiket, 1 tanesi güncel/trend tarzı etiket olsun; hepsi # ile başlasın, boşluksuz, tekrarsız, anlamsız/aşırı genel etiketlerden kaçın.\n\n'
+      + 'ADIM 6 - "detailText" alanını üret: haberin en can alıcı 2-3 ayrıntısını (ör. önemli bir gelişme, bir rakam/veri ya da bir açıklama) kısa ve öz şekilde veren bir Türkçe metin; 220-320 karakter uzunluğunda, TEK paragraf olsun, uzun/dolgu cümlelerden kaçın. Bu metin görsel üzerindeki başlık/açıklamayı tekrar etmemeli, onu tamamlayan öz bir ek bilgi sunmalı; bu, "detaylarını merak edenler" için 2. bir görselde kullanılacak.\n\n'
+      + 'KURALLAR:\n'
+      + '- Başlık alanlarını (title/badge gibi BÜYÜK HARF kullanılan alanlar) tamamen büyük harfle yaz.\n'
+      + '- Metinler kısa, çarpıcı ve haberin özünü yansıtsın; uydurma bilgi ekleme.\n'
+      + '- "b_date" alanını DOLDURMA / DEĞİŞTİRME: bu alan otomatik olarak günün gerçek tarihiyle dolu geliyor, sabit format kullanılıyor (örnek: 07 TEMMUZ 2026) ve saat bilgisi içermiyor.\n'
+      + '- SADECE aşağıdaki JSON formatında yanıt ver, başka hiçbir açıklama, markdown ya da kod bloğu ekleme:\n'
+      + '{"template":"breaking","themeIdx":0,"imageUrl":"https://... veya null","fields":{...},"caption":"...","hashtags":["#etiket1","#etiket2"],"detailText":"..."}\n\n'
+      + 'Haber linki: ' + url;
+
+    // ---- yardımcılar: sağlam JSON çıkarma ----
+    function extractJsonObject(text){
+      const start = text.indexOf('{');
+      const end = text.lastIndexOf('}');
+      if (start === -1 || end === -1 || end <= start){
+        throw new Error('Yanıt içinde JSON bulunamadı: ' + text.slice(0, 200));
+      }
+      return JSON.parse(text.slice(start, end + 1));
+    }
+
+    // ---- sayfa metnini okumak için birden fazla servis dene (biri engellenirse diğeri devreye girer) ----
+    async function fetchArticleText(targetUrl){
+      const attempts = [];
+      const errors = [];
+
+      // 1) r.jina.ai — sayfayı okunabilir markdown'a çevirir
+      attempts.push(async ()=>{
+        const resp = await fetch('https://r.jina.ai/' + encodeURI(targetUrl));
+        if (!resp.ok){
+          let detail = '';
+          try{ detail = (await resp.text()).slice(0,200); }catch(_){}
+          throw new Error('r.jina.ai HTTP ' + resp.status + (detail ? (': ' + detail) : ''));
+        }
+        return await resp.text();
+      });
+
+      // 2) allorigins — sayfanın ham HTML'ini CORS ile getirir, biz metne indirgeriz
+      attempts.push(async ()=>{
+        const resp = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl));
+        if (!resp.ok) throw new Error('allorigins HTTP ' + resp.status);
+        const html = await resp.text();
+        const stripped = html
+          .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+          .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+        return stripped;
+      });
+
+      for (const attempt of attempts){
+        try{
+          const text = await attempt();
+          if (text && text.trim().length >= 40) return text;
+          errors.push('içerik çok kısa/boş geldi');
+        } catch(e){
+          errors.push(e.message);
+        }
+      }
+      throw new Error('Sayfa hiçbir yöntemle okunamadı (' + errors.join(' | ') + ')');
+    }
+
+    // ---- 1) Groq'un compound sistemiyle linki DOĞRUDAN ziyaret ettirmeyi dene ----
+    // (Gemini sürümündeki "url_context" aracının Groq'taki karşılığı: "Visit Website" built-in
+    //  tool. Sadece groq/compound ve groq/compound-mini modellerinde çalışır; mesaj içindeki
+    //  URL'yi kendisi algılayıp ziyaret ettiği için ekstra bir "tools" parametresi gerekmez.)
+    async function tryVisitDirectly(){
+      const data = await callGroq({ model: GROQ_COMPOUND_MODEL, messages: [{ role: 'user', content: prompt }] });
+      const msg = ((data.choices || [])[0] || {}).message || {};
+      const text = msg.content || '';
+      if (!text){
+        throw new Error('Groq boş yanıt döndürdü' + (data.choices && data.choices[0] && data.choices[0].finish_reason ? (' (finish_reason: ' + data.choices[0].finish_reason + ')') : ''));
+      }
+      // linkin gerçekten ziyaret edilip edilmediğini executed_tools üzerinden doğrula
+      const visited = (msg.executed_tools || []).find(t => t.type === 'visit');
+      const fetchOk = !!visited && String(visited.output || '').trim().length > 60;
+      if (!fetchOk){
+        throw new Error('Site, Groq\'un ajan sistemi tarafından okunamadı (muhtemelen bot/güvenlik duvarı engeli).');
+      }
+      return extractJsonObject(text);
+    }
+
+    // ---- 2) OLMAZSA: sayfayı bir okuyucu proxy ile metne çevirip düz metin modeline gönder ----
+    async function tryViaExtractedText(){
+      setNewsStatus('Site doğrudan taranamadı, alternatif yöntemle tekrar deneniyor…');
+      const articleText = await fetchArticleText(url);
+      const trimmedText = articleText.slice(0, 9000); // istek boyutunu makul tut
+
+      const fallbackPrompt = prompt.replace('Haber linki: ' + url,
+        'Aşağıda haber sayfasından çıkarılmış metin/markdown/HTML içerik veriliyor (linkin kendisi değil, zaten okunmuş içeriği). '
+        + 'Görsel URL\'sini bu içerik içindeki markdown resim linklerinden (![...](url) gibi), <img> etiketlerinden ya da og:image meta verisinden bulmaya çalış, yoksa null yaz.\n\n'
+        + '--- HABER İÇERİĞİ BAŞLANGICI ---\n' + trimmedText + '\n--- HABER İÇERİĞİ SONU ---');
+
+      const data = await callGroq({
+        model: GROQ_MODEL,
+        messages: [{ role: 'user', content: fallbackPrompt }],
+        response_format: { type: 'json_object' }
+      });
+      const text = ((data.choices || [])[0] && data.choices[0].message && data.choices[0].message.content) || '';
+      if (!text) throw new Error('Groq boş yanıt döndürdü.');
+      return extractJsonObject(text);
+    }
+
+    try{
+      let parsed = null;
+      let lastErr = null;
+
+      // 1) ÖNCE: Groq'un compound sistemiyle doğrudan linki okumasını dene
+      try{
+        parsed = await tryVisitDirectly();
+      } catch(e1){
+        lastErr = e1;
+        console.warn('compound ile okuma başarısız, alternatif yönteme geçiliyor:', e1.message);
+      }
+
+      // API key geçersizse (401) tekrar denemenin anlamı yok, ikinci deneme de aynı sebeple başarısız olur
+      if (!parsed && lastErr && lastErr.status === 401){
+        throw lastErr;
+      }
+
+      // 2) OLMAZSA: sayfayı bir okuyucu proxy ile metne çevirip modele öyle gönder
+      //    (birden fazla servis denenir, biri engellenirse diğeri devreye girer)
+      if (!parsed){
+        try{
+          parsed = await tryViaExtractedText();
+        } catch(e2){
+          lastErr = e2;
+        }
+      }
+
+      if (!parsed){
+        throw lastErr || new Error('Bilinmeyen hata');
+      }
+
+      const tpl = TEMPLATE_FIELD_SCHEMA[parsed.template] ? parsed.template : 'minimal';
+      selectTemplateByKey(tpl);
+      fillTemplateFields(tpl, parsed.fields || {});
+
+      if (typeof parsed.themeIdx === 'number' && parsed.themeIdx >= 0 && parsed.themeIdx < THEMES.length){
+        selectThemeByIdx(parsed.themeIdx);
+      }
+
+      setNewsStatus('Metinler ve tema uygulandı, görsel aranıyor…');
+      let imageWarning = '';
+      if (parsed.imageUrl){
+        const img = await loadImageFromUrl(parsed.imageUrl);
+        if (img){
+          state.heroImg = img;
+          document.getElementById('imgThumb').src = img.src;
+        } else {
+          imageWarning = ' (Not: haberin görseli tarayıcı güvenliği nedeniyle otomatik alınamadı, "Görsel Yükle" ile elle ekleyebilirsin.)';
+        }
+      }
+
+      // caption + hashtag + detay metni alanlarını da doldur
+      aiCaptionEl.value = parsed.caption || '';
+      aiHashtagsEl.value = Array.isArray(parsed.hashtags) ? parsed.hashtags.join(' ') : (parsed.hashtags || '');
+      if (parsed.detailText) detailTextEl.value = parsed.detailText;
+      if (parsed.caption || (parsed.hashtags && parsed.hashtags.length)) aiResult.style.display = 'block';
+
+      render();
+      setNewsStatus('Gönderi otomatik oluşturuldu!' + imageWarning, imageWarning ? 'error' : 'ok');
+    } catch(err){
+      console.error('Haberden gönderi oluşturma hatası:', err);
+      let msg;
+      if (err.status === 429){
+        msg = 'Ücretsiz kota anlık limitine ulaşıldı, biraz sonra tekrar deneyin.';
+      } else if (err.status === 401){
+        msg = 'API key kabul edilmedi. index.html içindeki GROQ_API_KEY değerini kontrol edin: sadece key metni tırnaklar arasında olmalı, başında/sonunda fazladan boşluk, tırnak veya satır sonu olmamalı. console.groq.com/keys sayfasından key\'in hâlâ aktif olduğunu doğrulayın.';
+      } else {
+        msg = 'Haber analiz edilemedi. Teknik detay: ' + err.message;
+      }
+      setNewsStatus(msg, 'error');
+    } finally {
+      newsGenBtn.disabled = false;
+      newsGenBtn.textContent = '🔗 Linkten Gönderi Oluştur';
+      newsProgressEl.classList.remove('active');
+    }
+  }
+  newsGenBtn.addEventListener('click', generateFromNewsUrl);
+
+  // ---------- DOWNLOAD (ana gönderi: tekli ya da çiftli) ----------
+  // Promise döndürür: "Full Export" butonu bu adımın tam olarak bitmesini
+  // bekleyip bir sonraki adıma güvenle geçer. ÖNEMLİ: 2. görsel setTimeout
+  // içinde indirildiği için, orada oluşabilecek bir hata (ör. CORS nedeniyle
+  // "tainted canvas") ayrıca yakalanır — yoksa hem activeSlide kalıcı olarak
+  // yanlış slaytta takılı kalır hem de bu Promise hiç sonuçlanmaz.
+  function downloadMainPost(){
+    return new Promise((resolve, reject)=>{
+      const mime = exportFormat === 'jpeg' ? 'image/jpeg' : 'image/png';
+      const ext = exportFormat === 'jpeg' ? 'jpg' : 'png';
+      const baseName = (state.brand || 'gonderi').toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-' + state.template + '-' + state.ratio + '-' + suanSaatDamgasi();
+
+      function downloadCurrentCanvas(suffix){
+        const link = document.createElement('a');
+        link.download = baseName + suffix + '.' + ext;
+        link.href = canvas.toDataURL(mime, exportFormat === 'jpeg' ? 0.97 : undefined);
+        link.click();
+      }
+
+      const includeSecond = state.secondSlide && secondSlideSupported();
+
+      if (!includeSecond){
+        try{
+          downloadCurrentCanvas('');
+          resolve();
+        } catch(err){
+          reject(err);
+        }
+        return;
+      }
+
+      const originalSlide = state.activeSlide;
+      try{
+        setActiveSlide(1);
+        downloadCurrentCanvas('-1');
+      } catch(err){
+        setActiveSlide(originalSlide); // önizlemeyi bozuk bırakma
+        reject(err);
+        return;
+      }
+
+      // tarayıcıların art arda indirmeleri engellememesi için kısa gecikmeyle 2. görseli indir
+      setTimeout(()=>{
+        try{
+          setActiveSlide(2);
+          downloadCurrentCanvas('-2-detaylar');
+        } catch(err){
+          setActiveSlide(originalSlide); // hata olsa bile 1. slayta / doğru duruma dön
+          reject(err);
+          return;
+        }
+        setTimeout(()=>{
+          setActiveSlide(originalSlide);
+          resolve();
+        }, 150);
+      }, 350);
+    });
+  }
+
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    downloadMainPost().catch(err=>{
+      console.error('İndirme hatası:', err);
+      alert('Görsel indirilemedi. Otomatik doldurulan görsel harici bir siteden geldiyse tarayıcı güvenlik kısıtlaması (CORS) engelliyor olabilir — görseli kendiniz yükleyip tekrar deneyin.');
+    });
+  });
+
+  // ---------- COPY TO CLIPBOARD ----------
+  document.getElementById('copyImgBtn').addEventListener('click', async ()=>{
+    const btn = document.getElementById('copyImgBtn');
+    const original = btn.textContent;
+    try{
+      const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+      if (!blob) throw new Error('blob oluşturulamadı');
+      await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
+      btn.textContent = '✅ Kopyalandı';
+      setTimeout(()=> btn.textContent = original, 1500);
+    } catch(err){
+      console.error('Panoya kopyalama hatası:', err);
+      btn.textContent = '⚠️ Kopyalanamadı (CORS olabilir)';
+      setTimeout(()=> btn.textContent = original, 2200);
+    }
+  });
+
+  // ---------- HİKAYE (9:16) FORMATINDA AYRICA İNDİR ----------
+  // Mevcut oran ne olursa olsun (kare/dikey/yatay), aynı tasarımı geçici olarak
+  // 9:16 hikaye ölçüsünde yeniden çizip indirir; ardından ekranı olduğu gibi geri getirir.
+  // ÖNEMLİ: canvas.toDataURL() bazen "tainted canvas" (CORS) hatası fırlatabilir —
+  // bu durumda bile restore() her koşulda çalışır, yoksa önizleme kalıcı olarak
+  // hikaye boyutlarında/bozuk kalır.
+  function downloadStoryFormat(){
+    return new Promise((resolve, reject)=>{
+      const origRatio = state.ratio;
+      const origActiveSlide = state.activeSlide;
+      const origW = canvas.width, origH = canvas.height;
+
+      function restore(){
+        state.ratio = origRatio;
+        state.activeSlide = origActiveSlide;
+        canvas.width = origW;
+        canvas.height = origH;
+        W = canvas.width; H = canvas.height;
+        applyQualitySettings();
+        fitCanvas();
+        render();
+      }
+
+      try{
+        const mime = exportFormat === 'jpeg' ? 'image/jpeg' : 'image/png';
+        const ext = exportFormat === 'jpeg' ? 'jpg' : 'png';
+        const baseName = (state.brand || 'gonderi').toLowerCase().replace(/[^a-z0-9]+/g,'-') + '-' + state.template + '-hikaye-' + suanSaatDamgasi();
+
+        // geçici olarak hikaye oranına geç ve ana tasarımı (detay sayfasını değil) çiz
+        state.ratio = 'story';
+        state.activeSlide = 1;
+        canvas.width = RATIOS.story.w;
+        canvas.height = RATIOS.story.h;
+        W = canvas.width; H = canvas.height;
+        applyQualitySettings();
+        render();
+
+        const link = document.createElement('a');
+        link.download = baseName + '.' + ext;
+        link.href = canvas.toDataURL(mime, exportFormat === 'jpeg' ? 0.97 : undefined);
+        link.click();
+
+        restore();
+        resolve();
+      } catch(err){
+        restore(); // hata olsa da önizlemeyi mutlaka eski haline getir
+        reject(err);
+      }
+    });
+  }
+
+  // ---------- FULL EXPORT: HEPSİ TEK BUTONDA ----------
+  // 1) Gönderiyi indir (downloadBtn ile birebir aynı davranış: tekli ya da çiftli)
+  // 2) Hikaye (9:16) formatını ayrıca indir (zaten hikaye oranındaysa tekrar indirmez)
+  // 3) Açıklama + hashtag metnini panoya kopyala (aiCopyBtn ile birebir aynı davranış)
+  const fullExportBtn = document.getElementById('fullExportBtn');
+  function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
+
+  fullExportBtn.addEventListener('click', async ()=>{
+    const originalLabel = fullExportBtn.textContent;
+    fullExportBtn.disabled = true;
+
+    // 1) ÖNCE panoya kopyala. Tarayıcılar Clipboard API'ye yalnızca kullanıcı
+    //    tıklamasından hemen sonraki kısa süre içinde izin verir; indirmeler
+    //    arasındaki bekleme süreleri (setTimeout'lar) bu izni düşürüp
+    //    kopyalamayı sessizce başarısız kılabiliyordu. Bu yüzden en önce,
+    //    hiçbir "await sleep" işleminden geçmeden bunu yapıyoruz.
+    const hasCaptionText = !!(aiCaptionEl.value.trim() || aiHashtagsEl.value.trim());
+    if (hasCaptionText){
+      fullExportBtn.textContent = '⏳ Açıklama panoya kopyalanıyor…';
+      try{
+        await copyDescriptionAndHashtags();
+      } catch(copyErr){
+        console.error('Panoya kopyalama hatası:', copyErr);
+        setAiStatus('Kopyalama başarısız oldu (sekme odakta değil olabilir). İndirmelere devam ediliyor…', true);
+      }
+    } else {
+      setAiStatus('Not: Açıklama/hashtag oluşturulmadığı için kopyalanacak metin yok.', false);
+    }
+
+    try{
+      // 2) Ana gönderi (tekli/çiftli)
+      fullExportBtn.textContent = '⏳ Gönderi indiriliyor…';
+      await downloadMainPost();
+
+      // 3) Hikaye (9:16) formatı — zaten hikaye oranındaysak tekrar indirmeyelim
+      if (state.ratio !== 'story'){
+        await sleep(400); // ardışık indirmelerin tarayıcı tarafından engellenmemesi için kısa ara
+        fullExportBtn.textContent = '⏳ Hikaye (9:16) indiriliyor…';
+        await downloadStoryFormat();
+      }
+
+      fullExportBtn.textContent = '✅ Tümü Tamamlandı!';
+    } catch(err){
+      console.error('Full export hatası:', err);
+      fullExportBtn.textContent = '⚠️ Bir sorun oluştu';
+      alert('Full Export sırasında bir sorun oluştu. Otomatik doldurulan görsel harici bir siteden geldiyse tarayıcı güvenlik kısıtlaması (CORS) engelliyor olabilir — görseli kendiniz yükleyip tekrar deneyin.');
+    } finally {
+      setTimeout(()=>{
+        fullExportBtn.textContent = originalLabel;
+        fullExportBtn.disabled = false;
+      }, 1700);
+    }
+  });
+
+  // initial render once fonts are ready
+  fitCanvas();
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(render);
+  }
+  render();
+  setTimeout(render, 300); // safety re-render after web fonts fully swap in
+})();
+</script>
+</body>
+</html>
