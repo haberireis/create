@@ -357,6 +357,8 @@
         <label class="upload-btn" for="imgInput">Görsel Yükle</label>
         <input type="file" id="imgInput" accept="image/*">
       </div>
+      <button class="ai-btn" id="imgGenBtn" style="margin-top:10px;">🎨 Yapay Zeka ile Haber Görseli Oluştur</button>
+      <p class="ai-status" id="imgGenStatus"></p>
 
       <!-- 2ND SLIDE: DETAIL PAGE (square/portrait only) -->
       <div class="second-slide-box">
@@ -2130,6 +2132,16 @@
   // otomatik temizler — "geçersiz kimlik bilgisi" hatalarının en sık nedeni budur.
   const GROQ_KEY_CLEAN = String(GROQ_API_KEY || '').trim().replace(/^["'`]+|["'`]+$/g, '');
 
+  // ---------- HABER GÖRSELİ ÜRETİMİ (Pollinations.ai — görsel üretim modelleri) ----------
+  // Groq görsel ÜRETMEZ (sadece metin/görsel-anlama); bu yüzden haber görseli için ayrı,
+  // ücretsiz bir sağlayıcı kullanılıyor. Kurulum:
+  // 1) enter.pollinations.ai adresine gidip ücretsiz hesap açın (kredi kartı istemez).
+  // 2) "Publishable" (pk_ ile başlayan) bir key oluşturun — bu tür key tarayıcıda görünmesi
+  //    güvenli olacak şekilde tasarlanmıştır; "Secret" (sk_) key'i ASLA burada kullanmayın.
+  // 3) Aşağıya yapıştırın.
+  const POLLINATIONS_API_KEY = 'BURAYA_KENDI_POLLINATIONS_KEYINIZI_YAPISTIRIN';
+  const POLLINATIONS_KEY_CLEAN = String(POLLINATIONS_API_KEY || '').trim().replace(/^["'`]+|["'`]+$/g, '');
+
   // Groq'un OpenAI-uyumlu chat completions endpoint'ine tek noktadan istek atan ortak yardımcı.
   async function callGroq(payload){
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
@@ -2295,6 +2307,108 @@
     }
   }
   aiBtn.addEventListener('click', generateCaption);
+
+  // ---------- HABER GÖRSELİ OLUŞTUR (AI) ----------
+  // İki aşamalı çalışır: 1) Groq, formdaki başlık/açıklamadan kısa ve betimleyici bir
+  // İNGİLİZCE görsel promptu yazar (görsel modelleri İngilizce girdiyle daha tutarlı sonuç
+  // verir). 2) O prompt, Pollinations.ai'nin ücretsiz "flux" modeline gönderilip görsel
+  // üretilir ve mevcut "Görsel Yükle" ile birebir aynı yola (loadImageFromUrl) sokularak
+  // habere eklenir.
+  const imgGenBtn = document.getElementById('imgGenBtn');
+  const imgGenStatusEl = document.getElementById('imgGenStatus');
+
+  function setImgGenStatus(msg, isError){
+    imgGenStatusEl.textContent = msg || '';
+    imgGenStatusEl.classList.toggle('error', !!isError);
+  }
+
+  async function generateNewsImage(){
+    if (!GROQ_KEY_CLEAN || GROQ_KEY_CLEAN.indexOf('BURAYA_') === 0){
+      setImgGenStatus('Önce index.html içine kendi ücretsiz Groq API keyinizi yapıştırın.', true);
+      return;
+    }
+    if (!POLLINATIONS_KEY_CLEAN || POLLINATIONS_KEY_CLEAN.indexOf('BURAYA_') === 0){
+      setImgGenStatus('Önce index.html içine kendi ücretsiz Pollinations API keyinizi yapıştırın (enter.pollinations.ai adresinden alabilirsiniz).', true);
+      return;
+    }
+
+    const c = collectAiContext();
+    if (!c.title && !c.desc){
+      setImgGenStatus('Önce başlık ya da açıklama alanlarından birini doldurun.', true);
+      return;
+    }
+
+    imgGenBtn.disabled = true;
+    imgGenBtn.textContent = '🎨 Görsel isteği hazırlanıyor...';
+    setImgGenStatus('Habere uygun bir görsel isteği hazırlanıyor…');
+
+    try{
+      // 1) Groq: habere uygun, sade ve güvenli bir İngilizce görsel betimlemesi yazdır.
+      const promptForPrompt = 'Sen bir editoryal haber fotoğrafı / illüstrasyon yönetmenisin. '
+        + 'Aşağıdaki haber içeriğine uygun, tek bir görseli betimleyen kısa bir İNGİLİZCE metin yaz; '
+        + 'bu metin doğrudan bir yapay zeka görsel üretim modeline gönderilecek.\n\n'
+        + 'Şablon türü: ' + c.templateLabel + '\n'
+        + 'Başlık: ' + c.title + '\n'
+        + 'Açıklama / detay: ' + c.desc + '\n'
+        + 'Ek bilgi: ' + c.extra + '\n\n'
+        + 'KURALLAR:\n'
+        + '- SADECE somut, görsel öğeler tarif et (sahne, mekân, nesneler, ışık, kompozisyon, çekim tarzı); yorum ya da soyut kavram yazma.\n'
+        + '- Gerçek, ismi geçen hiçbir kişiyi (siyasetçi, ünlü, herhangi bir gerçek insan) TARİF ETME veya betimleme; bunun yerine jenerik/tanımlanamayan kişiler, semboller, mekânlar ya da nesneler kullan.\n'
+        + '- Editoryal haber fotoğrafçılığı ya da temiz kurumsal illüstrasyon tarzında olsun; metin, logo, watermark ya da yazı İSTEME.\n'
+        + '- Şiddet, kan, çıplaklık ya da rahatsız edici hiçbir öğe içermesin.\n'
+        + '- En fazla 40 kelime, tek paragraf, sadece görsel betimlemenin kendisini yaz — başka hiçbir açıklama, tırnak işareti ya da başlık ekleme.';
+
+      const promptData = await callGroq({
+        model: GROQ_MODEL,
+        messages: [{ role: 'user', content: promptForPrompt }],
+        temperature: 0.8
+      });
+      let imagePrompt = (((promptData.choices||[])[0]||{}).message && promptData.choices[0].message.content) || '';
+      imagePrompt = imagePrompt.replace(/^["'“”]+|["'“”]+$/g, '').trim();
+      if (!imagePrompt) imagePrompt = [c.title, c.desc].filter(Boolean).join(', ');
+
+      // 2) Pollinations.ai: mevcut kanvas oranına yakın bir boyutta görsel üret.
+      setImgGenStatus('Görsel oluşturuluyor, bu birkaç saniye sürebilir…');
+      imgGenBtn.textContent = '🎨 Görsel oluşturuluyor...';
+
+      const ratio = (W && H) ? (W / H) : 1;
+      let genW, genH;
+      if (ratio >= 1){ genW = 1280; genH = Math.round(1280 / ratio); }
+      else { genH = 1280; genW = Math.round(1280 * ratio); }
+      genW = Math.max(512, Math.round(genW/8)*8);
+      genH = Math.max(512, Math.round(genH/8)*8);
+      const seed = Math.floor(Math.random() * 2147483647);
+
+      const pollUrl = 'https://gen.pollinations.ai/image/' + encodeURIComponent(imagePrompt)
+        + '?model=flux&width=' + genW + '&height=' + genH + '&seed=' + seed
+        + '&key=' + encodeURIComponent(POLLINATIONS_KEY_CLEAN);
+
+      const img = await loadImageFromUrl(pollUrl);
+      if (img){
+        state.heroImg = img;
+        document.getElementById('imgThumb').src = img.src;
+        render();
+        setImgGenStatus('Görsel oluşturuldu ve eklendi ✅');
+      } else {
+        setImgGenStatus('Görsel oluşturulamadı ya da tarayıcı güvenliği nedeniyle yüklenemedi. "Görsel Yükle" ile elle ekleyebilirsin.', true);
+      }
+    } catch(err){
+      console.error('Haber görseli oluşturma hatası:', err);
+      let msg;
+      if (err.status === 429){
+        msg = 'Ücretsiz kota anlık limitine ulaşıldı, biraz sonra tekrar deneyin.';
+      } else if (err.status === 401){
+        msg = 'API key kabul edilmedi. GROQ_API_KEY ya da POLLINATIONS_API_KEY değerlerini kontrol edin.';
+      } else {
+        msg = 'Görsel oluşturulamadı. Teknik detay: ' + err.message;
+      }
+      setImgGenStatus(msg, true);
+    } finally {
+      imgGenBtn.disabled = false;
+      imgGenBtn.textContent = '🎨 Yapay Zeka ile Haber Görseli Oluştur';
+    }
+  }
+  imgGenBtn.addEventListener('click', generateNewsImage);
 
   // Açıklama + hashtag metnini panoya kopyalar. Hem bu tekil butona hem de
   // aşağıdaki "Full Export" butonuna ortak hizmet verir (Promise döndürür).
