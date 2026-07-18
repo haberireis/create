@@ -4546,14 +4546,14 @@ Bu alanı doldurmak, aşağıdaki alanları yazmadan önce içeriği gerçekten 
   // saniyeler içinde alınabilir (ayda 10.000 karakter / ~10 dk ses ücretsiz).
   // ---------------------------------------------------------------------------
   const ELEVEN_CONFIG = {
-    apiKey: '', // ← buraya kendi ElevenLabs API keyinizi yapıştırın (elevenlabs.io/app/settings/api-keys)
+    apiKey: 'sk_0306f49f665d0d5caf188c63d13e8ed6b1c870ef7ffb1423', // ← buraya kendi ElevenLabs API keyinizi yapıştırın (elevenlabs.io/app/settings/api-keys)
     modelId: 'eleven_multilingual_v2',
     maxChars: 9000 // Multilingual v2 tek istekte ~10.000 karakter sınırına sahip; güvenli pay bırakıyoruz
   };
 
   // Seçili ses — üstteki "🎙️ Seslendirme Sesi" açılır menüsünden değiştirilir.
   // Varsayılan: Rachel (21m00Tcm4TlvDq8ikWAM), çok dilli/Türkçe destekli premade bir ses.
-  let selectedVoiceId = '21m00Tcm4TlvDq8ikWAM';
+  let selectedVoiceId = 'fXhoW006nc5Wf8xkGVSy';
   const voiceoverSelectEl = document.getElementById('voiceoverSelect');
   const voiceoverRefreshBtn = document.getElementById('voiceoverRefreshBtn');
   const voiceoverSettingsStatus = document.getElementById('voiceoverSettingsStatus');
